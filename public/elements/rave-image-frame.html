@@ -1,0 +1,18 @@
+<link rel="import" href="/bower/polymer/polymer.html">
+<link href="/public/css/menubar.css" rel="stylesheet">
+
+<polymer-element name="rave-image-frame" attributes="imageurl" extends="div" noscript>
+    <template>
+        <style>
+            :host {
+                background-image: "{{imagesrc}}";
+            }
+        </style>
+        <content></content>
+    </template>
+    <script>
+        Polymer('rave-image-frame', {
+            imageurl: 'https://lorempixel.com/g/1920/1080',
+        });
+    </script>
+</polymer-element>
