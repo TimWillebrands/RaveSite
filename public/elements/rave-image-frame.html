@@ -5,7 +5,7 @@
     <template>
         <style>
             :host {
-                background-image: "{{imagesrc}}";
+                background-image:url('{{imagesrc}}');
                 height: 200px;
             }
         </style>
@@ -14,7 +14,7 @@
     </template>
     <script>
         Polymer('rave-image-frame', {
-            imageurl: 'https://lorempixel.com/g/1920/1080',
+            imagesrc: 'https://lorempixel.com/g/1920/1080',
         });
     </script>
 </polymer-element>
