@@ -1,13 +1,15 @@
 <link rel="import" href="/bower/polymer/polymer.html">
 <link href="/public/css/menubar.css" rel="stylesheet">
 
-<polymer-element name="rave-image-frame" attributes="imageurl" extends="div" noscript>
+<polymer-element name="rave-image-frame" attributes="imageurl" extends="div">
     <template>
         <style>
             :host {
                 background-image: "{{imagesrc}}";
+                height: 200px;
             }
         </style>
+        <img src="{{imagesrc}}">
         <content></content>
     </template>
     <script>
