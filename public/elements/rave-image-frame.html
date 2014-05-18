@@ -5,7 +5,7 @@
     <template>
         <style>
             :host {
-                background-image:url('{{imagesrc}}');
+                background-image: url('http://khongthe.com/wallpapers/animals/blue-puppy-dog-eyes-227083.jpg');
                 height: 200px;
                 position: absolute;
                 width: 100%;
@@ -31,6 +31,7 @@
             heightcompensation: 0,
             domReady: function() {
                 this.attributes.height = window.innerHeight - this.attributes.heightcompensation;
+                this.style.backgroundImage  = 'url({{imagesrc}})';
                 addEvent(window, "resize", function(element){
                     element.attributes.height = window.innerHeight - element.attributes.heightcompensation;
                 }(this));
