@@ -1,20 +1,44 @@
 <link rel="import" href="/bower/polymer/polymer.html">
 <link href="/public/css/menubar.css" rel="stylesheet">
 
-<polymer-element name="rave-image-frame" extends="div">
+<polymer-element name="rave-image-frame" attributes="imagesrc height heightcompensation" extends="div">
     <template>
         <style>
             :host {
                 background-image:url('{{imagesrc}}');
                 height: 200px;
+                position: absolute;
+                width: 100%;
+                bottom: 0;
             }
         </style>
-        <img src="{{imagesrc}}">
         <content></content>
     </template>
     <script>
+        var addEvent = function(elem, type, eventHandle) {
+            if (elem === null || typeof(elem) == 'undefined') return;
+            if ( elem.addEventListener ) {
+                elem.addEventListener( type, eventHandle, false );
+            } else if ( elem.attachEvent ) {
+                elem.attachEvent( "on" + type, eventHandle );
+            } else {
+                elem["on"+type]=eventHandle;
+            }
+        };
+        
         Polymer('rave-image-frame', {
             imagesrc: 'https://lorempixel.com/g/1920/1080',
+            heightcompensation: 0,
+            domReady: function() {
+                this.attributes.height = window.innerHeight - this.attributes.heightcompensation;
+                addEvent(window, "resize", function(element){
+                    element.attributes.height = window.innerHeight - element.attributes.heightcompensation;
+                }(this));
+            },
+            attributeChanged: function(attrName, oldVal, newVal) {
+                //var newVal = this.getAttribute(attrName);
+                console.log(attrName, 'old: ' + oldVal, 'new:', newVal);
+            }
         });
     </script>
 </polymer-element>
