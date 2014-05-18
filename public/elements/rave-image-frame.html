@@ -34,6 +34,7 @@
                 this.style.backgroundImage  = 'url('+ this.attributes.imagesrc +')';
                 addEvent(window, "resize", function(element){
                     element.attributes.height = window.innerHeight - element.attributes.heightcompensation;
+                    console.log(this.attributes.height, this.attributes.heightcompensation, this.attributes.imagesrc);
                 }(this));
                 console.log(this.attributes.height, this.attributes.heightcompensation, this.attributes.imagesrc);
             },
