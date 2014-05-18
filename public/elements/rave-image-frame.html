@@ -31,10 +31,11 @@
             heightcompensation: 0,
             domReady: function() {
                 this.attributes.height = window.innerHeight - this.attributes.heightcompensation;
-                this.style.backgroundImage  = 'url({{imagesrc}})';
+                this.style.backgroundImage  = 'url('+ this.attributes.imagesrc +')';
                 addEvent(window, "resize", function(element){
                     element.attributes.height = window.innerHeight - element.attributes.heightcompensation;
                 }(this));
+                console.log(this.attributes.height, this.attributes.heightcompensation, this.attributes.imagesrc);
             },
             attributeChanged: function(attrName, oldVal, newVal) {
                 //var newVal = this.getAttribute(attrName);
