@@ -5,12 +5,12 @@
     <template>
         <div class="container">
             <ul id="nav">
-                <li><a href="#">Home</a></li>
-                <li><a href="http://www.script-tutorials.com/css3-responsive-menu/">Back to Responsive menu tutorial</a></li>
+                <content></content>
             </ul>
         </div>
         <link href="/public/css/menubar.css" rel="stylesheet">
     </template>
+    <content id="content" select="li"></content>
     <script>
         /*global Polymer lib*/
         Polymer('rave-menubar', {
@@ -19,7 +19,9 @@
             height: 0,
             domReady: function() {
                 var menubar = this.$.nav;
-                var everythingExceptMenubar = document.getElementById("everythingExceptMenubar");
+                var everythingExceptMenubar = $("#everythingExceptMenubar").get(0);
+                $("li",this).appendTo(menubar);
+                
                 window.menubarHeight = lib.getAbsoluteHeight(menubar);
                 everythingExceptMenubar.setAttribute("style",
                         "height: 500px;height: -webkit-calc(100% - " + window.menubarHeight +"px);"+
