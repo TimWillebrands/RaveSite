@@ -20,7 +20,8 @@
             domReady: function() {
                 var menubar = this.$.nav;
                 var everythingExceptMenubar = $("#everythingExceptMenubar").get(0);
-                $("li",this).appendTo(menubar);
+                $(".normalSize",this).appendTo(menubar);
+                $(".phoneSize",this).appendTo(menubar);
                 
                 window.menubarHeight = lib.getAbsoluteHeight(menubar);
                 everythingExceptMenubar.setAttribute("style",

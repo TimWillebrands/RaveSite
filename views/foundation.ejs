@@ -5,6 +5,8 @@
 
         <meta charset="utf-8" />
         <meta name="author" content="Script Tutorials" />
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="mobile-web-app-capable" content="yes">
         <title>Ravé</title>
 
         <script src="//cdnjs.cloudflare.com/ajax/libs/polymer/0.2.4/platform.js"></script>
@@ -19,9 +21,16 @@
     </head>
     <body>
         <rave-menubar>
-            <li><a href="/">Home</a></li>
-            <li><a href="/Werk">Werk</a></li>
-            <li><a href="/Contact">Contact</a></li>
+            <li class="normalSize"><a href="/">Home</a></li>
+            <li class="normalSize"><a href="/werk">Werk</a></li>
+            <li class="normalSize"><a href="/contact">Contact</a></li>
+            <li class="phoneSize"><a href="#s1">Menu</a>
+                <ul class="subs">
+                            <li><a href="#">Submenu x</a></li>
+                            <li><a href="#">Submenu y</a></li>
+                            <li><a href="#">Submenu z</a></li>
+                </ul>
+            </li>
         </rave-menubar>
         <%- body -%>
     </body>
