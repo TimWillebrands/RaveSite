@@ -1,7 +1,7 @@
 <link rel="import" href="/bower/polymer/polymer.html">
 <link href="/public/css/menubar.css" rel="stylesheet">
 
-<polymer-element name="rave-menubar" noscript>
+<polymer-element name="rave-menubar" apply-author-styles>
     <template>
         <div class="container">
             <ul id="nav">
@@ -9,5 +9,30 @@
                 <li><a href="http://www.script-tutorials.com/css3-responsive-menu/">Back to Responsive menu tutorial</a></li>
             </ul>
         </div>
+        <link href="/public/css/menubar.css" rel="stylesheet">
     </template>
+    <script>
+        /*global Polymer lib*/
+        Polymer('rave-menubar', {
+            imagesrc: 'https://lorempixel.com/g/1920/1080',
+            heightcompensation: 0,
+            height: 0,
+            domReady: function() {
+                var menubar = this.$.nav;
+                var everythingExceptMenubar = document.getElementById("everythingExceptMenubar");
+                window.menubarHeight = lib.getAbsoluteHeight(menubar);
+                everythingExceptMenubar.setAttribute("style",
+                        "height: 500px;height: -webkit-calc(100% - " + window.menubarHeight +"px);"+
+                        "height: -moz-calc(100% - " + window.menubarHeight +"px);"+
+                        "height: calc(100% - " + window.menubarHeight +"px);");
+                lib.addEvent(window, "resize", function(){
+                    window.menubarHeight = lib.getAbsoluteHeight(menubar);
+                    everythingExceptMenubar.setAttribute("style",
+                            "height: 500px;height: -webkit-calc(100% - " + window.menubarHeight +"px);"+
+                            "height: -moz-calc(100% - " + window.menubarHeight +"px);"+
+                            "height: calc(100% - " + window.menubarHeight +"px);");
+                });
+            }
+        });
+    </script>
 </polymer-element>

@@ -1,0 +1,44 @@
+@fullSize: 400px;
+@tabletSize: 200px;
+
+/* FULL WIDTH */
+
+.span_bar {
+	width: @fullSize;
+	height: 100%;
+}
+.span_content {
+	width: 100%; /** older browsers **/
+    width: ~"-webkit-calc(100% - "@fullSize~")"; /** Safari 6, Chrome 19-25 **/
+    width: ~"-moz-calc(100% - "@fullSize~")"; /** FF 4-15  **/
+    width: ~"calc(100% - "@fullSize~")"; /** FF 16+, IE 9+, Opera 15, Chrome 26+, Safari 7 and future other browsers **/
+    height: 100%;
+}
+
+/* BETWEEN 480px AND 960px PIXELS */
+
+@media only screen and (min-width: 480px) and (max-width: 960px) {
+    .span_bar {
+    	width: @tabletSize;
+    }
+    .span_content {
+    	width: 100%; /** older browsers **/
+        width: ~"-webkit-calc(100% - "@tabletSize~")"; /** Safari 6, Chrome 19-25 **/
+        width: ~"-moz-calc(100% - "@tabletSize~")"; /** FF 4-15  **/
+        width: ~"calc(100% - "@tabletSize~")"; /** FF 16+, IE 9+, Opera 15, Chrome 26+, Safari 7 and future other browsers **/
+    }
+}    
+
+
+/*  GO FULL WIDTH AT LESS THAN 480 PIXELS */
+
+@media only screen and (max-width: 479px) {
+    .span_content {
+    	width: 100%;
+    	height: 80%;
+    }
+    .span_bar {
+    	width: 100%;
+    	height: 20%;
+    }
+}

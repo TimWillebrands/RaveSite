@@ -26,19 +26,21 @@ function getFile(fileName){
 
 
 app.get('/', function(req, res) {
-  res.render('foundation', { body: 
-    ejs.render(getFile('index'), {title: 'N iggaaaaahhh'})
-  });
+    res.render('foundation', { 
+        body: ejs.render(getFile('index'), {
+            title: 'N iggaaaaahhh',
+        }),
+    });
 });
 
 app.use(lessMiddleware(path.join(__dirname, 'less'), {
-  dest: __dirname,
-  force: true,
-  preprocess: {
-    path: function(pathname, req) {
-        return pathname.replace('/public/css', '');
+    dest: __dirname,
+    force: true,
+    preprocess: {
+        path: function(pathname, req) {
+            return pathname.replace('/public/css', '');
+        }
     }
-  }
 }));
 
 app.use('/public',express.static(path.join(__dirname, 'public')/*, { maxAge: cacheTime }*/));

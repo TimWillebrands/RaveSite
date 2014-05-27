@@ -1,42 +1,21 @@
 <link rel="import" href="/bower/polymer/polymer.html">
 <link href="/public/css/menubar.css" rel="stylesheet">
 
-<polymer-element name="rave-image-frame" attributes="imagesrc height heightcompensation" extends="div">
+<polymer-element name="rave-image-frame" attributes="imagesrc" extends="div">
     <template>
         <style>
             :host {
-                background-image: url('http://khongthe.com/wallpapers/animals/blue-puppy-dog-eyes-227083.jpg');
-                height: 200px;
-                position: absolute;
                 width: 100%;
-                bottom: 0;
+                height: 100%;
             }
         </style>
         <content></content>
     </template>
     <script>
-        var addEvent = function(elem, type, eventHandle) {
-            if (elem === null || typeof(elem) == 'undefined') return;
-            if ( elem.addEventListener ) {
-                elem.addEventListener( type, eventHandle, false );
-            } else if ( elem.attachEvent ) {
-                elem.attachEvent( "on" + type, eventHandle );
-            } else {
-                elem["on"+type]=eventHandle;
-            }
-        };
-        
         Polymer('rave-image-frame', {
-            imagesrc: 'https://lorempixel.com/g/1920/1080',
-            heightcompensation: 0,
+            imagesrc: 'https://lorempixel.com/1920/1080',
             domReady: function() {
-                this.attributes.height = window.innerHeight - this.attributes.heightcompensation;
-                this.style.backgroundImage  = 'url('+ this.attributes.imagesrc +')';
-                addEvent(window, "resize", function(element){
-                    element.attributes.height = window.innerHeight - element.attributes.heightcompensation;
-                    console.log(this.attributes.height, this.attributes.heightcompensation, this.attributes.imagesrc);
-                }(this));
-                console.log(this.attributes.height, this.attributes.heightcompensation, this.attributes.imagesrc);
+                this.style.backgroundImage = 'url("' + this.imagesrc + '")';
             },
             attributeChanged: function(attrName, oldVal, newVal) {
                 //var newVal = this.getAttribute(attrName);

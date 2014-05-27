@@ -1,4 +1,3 @@
-@import url(https://fonts.googleapis.com/css?family=Dosis:600);
 @import url(styleconf.less);
 
 * {
@@ -130,7 +129,14 @@ body {
     color: #FFFFFF;
 }
 
-@media all and (max-width : 980px) {
+@media all and (min-width: 480px) and (max-width: 960px) {
+    #nav>li>a{
+        //font-size: 1.1em;
+        padding: 0 10px;
+    }
+}
+
+@media all and (max-width : 479px) {
     #nav {
         & > li {
             float: none;
