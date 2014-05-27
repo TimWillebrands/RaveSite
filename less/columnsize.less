@@ -32,7 +32,17 @@
 
 /*  GO FULL WIDTH AT LESS THAN 480 PIXELS */
 
-@media only screen and (max-width: 479px) {
+@media only screen and (max-width: 479px) and (max-height: 503px)  {
+    .span_content {
+    	width: 100%;
+    	height: ~"calc(100% - 80px)";
+    }
+    .span_bar {
+    	width: 100%;
+    	height: 80px;
+    }
+}
+@media only screen and (max-width: 479px) and (min-height: 502px) {
     .span_content {
     	width: 100%;
     	height: 80%;

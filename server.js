@@ -28,7 +28,7 @@ function getFile(fileName){
 app.get('/', function(req, res) {
     res.render('foundation', { 
         body: ejs.render(getFile('index'), {
-            title: 'N iggaaaaahhh',
+            title: 'Sample Text',
         }),
     });
 });
