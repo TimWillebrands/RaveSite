@@ -1,5 +1,6 @@
 @fullSize: 400px;
 @tabletSize: 200px;
+@landscapeSize: 140px;
 
 /* FULL WIDTH */
 
@@ -17,7 +18,7 @@
 
 /* BETWEEN 480px AND 960px PIXELS */
 
-@media only screen and (min-width: 480px) and (max-width: 960px) {
+@media only screen and (min-width: 640px) and (max-width: 1080px) {
     .span_bar {
     	width: @tabletSize;
     }
@@ -26,6 +27,20 @@
         width: ~"-webkit-calc(100% - "@tabletSize~")"; /** Safari 6, Chrome 19-25 **/
         width: ~"-moz-calc(100% - "@tabletSize~")"; /** FF 4-15  **/
         width: ~"calc(100% - "@tabletSize~")"; /** FF 16+, IE 9+, Opera 15, Chrome 26+, Safari 7 and future other browsers **/
+    }
+}  
+
+/* BETWEEN 480px AND 960px PIXELS */
+
+@media only screen and (min-width: 480px) and (max-width: 639px) {
+    .span_bar {
+    	width: @landscapeSize;
+    }
+    .span_content {
+    	width: 100%; /** older browsers **/
+        width: ~"-webkit-calc(100% - "@landscapeSize~")"; /** Safari 6, Chrome 19-25 **/
+        width: ~"-moz-calc(100% - "@landscapeSize~")"; /** FF 4-15  **/
+        width: ~"calc(100% - "@landscapeSize~")"; /** FF 16+, IE 9+, Opera 15, Chrome 26+, Safari 7 and future other browsers **/
     }
 }    
 
