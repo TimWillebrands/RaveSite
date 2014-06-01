@@ -19,6 +19,9 @@ body {
     //margin-top: 30px;
     width: 100%;
 }
+li.phoneSize {
+    display: none;
+}
 #nav {
     background-color: #F5F5F5;
     border-bottom: 5px solid #333333;
@@ -159,5 +162,11 @@ body {
     }
     #nav li #s1:target + ul.subs,#nav li #s2:target + ul.subs {
         display: block;
+    }
+    li.phoneSize {
+        display: list-item;
+    }
+    li.normalSize {
+        display: none;
     }
 }
