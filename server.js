@@ -49,4 +49,6 @@ app.use('/bower',express.static(path.join(__dirname, 'bower_components'), { maxA
 // START THE SERVER
 // ==============================================
 app.listen(port);
-console.log('magic happening at: ' + port);
+console.log('magic happening at: ' + port);=======
+#!/bin/env node
+//  OpenShift
