@@ -1,6 +1,7 @@
 {
 	"name": "express-router-experiments",
 	"main": "server.js",
+    "version": "0.0.01",
 	"dependencies": {
 		"express": "~4.0.0",
 		"mongoose": "~3.8.8",
