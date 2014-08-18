@@ -1,12 +1,13 @@
 {
-	"name": "express-router-experiments",
+	"name": "PersonalWebsite",
 	"main": "server.js",
-    "version": "0.0.01",
+    "version": "0.0.02",
 	"dependencies": {
 		"express": "~4.0.0",
 		"mongoose": "~3.8.8",
 		"ejs": "~1.0.0",
-        "qwery": "x.x.x"
+        "qwery": "x.x.x",
+        "flickr-with-uploads": "*"
 	},
     "engines": {
         "node": "0.10.x"

@@ -1,9 +1,14 @@
 :host {
   display: block;
+  position: relative;
 }
 
 #panel {
+  position: absolute;
+  top: 0;
+  left: 0;
   height: 100%;
+  width: 100%;
 }
 
 .main {
@@ -46,6 +51,8 @@ h1 {
 
 .ntitle {
   font-size: 26px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid whitesmoke;
 }
 
 .box {
@@ -74,15 +81,16 @@ pre code {
 
 /**/
 
+.details {
+  display: flex;
+}
+
 .details-name {
-  display: inline-block; 
-  vertical-align: top;
-  width: 190px;
+  flex: 1;
 }
 
 .details-info {
-  display: inline-block;
-  max-width: 540px;
+  flex: 2;
 }
 
 .attribute-box {
@@ -105,6 +113,25 @@ pre code {
   border-radius: none;
   padding: 0;
   font-size: 1.2em;
+}
+
+.property-box .ntitle {
+  padding: 24px 16px;
+}
+
+.property-box code {
+  color: #4285F4;
+  border: none;
+  background-color: transparent;
+  border-radius: none;
+  padding: 0;
+  font-size: 1.2em;
+}
+
+.property-box .details {
+  background-color: lightblue;
+  padding: 8px 16px;
+  border-bottom: 1px solid #D1CCA1;
 }
 
 .method-box {
@@ -152,5 +179,4 @@ pre code {
   padding: 0;
   font-size: 1.2em;
 }
-
 

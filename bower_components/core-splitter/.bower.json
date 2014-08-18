@@ -2,17 +2,16 @@
   "name": "core-splitter",
   "private": true,
   "dependencies": {
-    "core-layout": "Polymer/core-layout#0.2.4"
+    "polymer": "Polymer/polymer#master"
   },
-  "version": "0.2.4",
   "homepage": "https://github.com/Polymer/core-splitter",
-  "_release": "0.2.4",
+  "_release": "e7a33e476a",
   "_resolution": {
-    "type": "version",
-    "tag": "0.2.4",
-    "commit": "85937f48994b14c07bb009297f12c45a135e38fe"
+    "type": "branch",
+    "branch": "master",
+    "commit": "e7a33e476acae10b6c1fb4a158a890e6798e4709"
   },
   "_source": "git://github.com/Polymer/core-splitter.git",
-  "_target": "0.2.4",
+  "_target": "master",
   "_originalSource": "Polymer/core-splitter"
 }

@@ -1,4 +1,4 @@
 core-list
 ============
 
-A list for displaying a large number of items.
+See the [component page](http://polymer-project.org/docs/elements/core-elements.html#core-list) for more information.
