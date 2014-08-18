@@ -1,0 +1,25 @@
+<link rel="import" href="/public/elements/rave-tabs.html">
+<link rel="import" href="/public/elements/rave-item-toolbar.html">
+<link rel="import" href="/public/elements/rave-item-list.html">
+<link rel="import" href="/public/elements/rave-item.html">
+<link href="/public/css/admin.css" rel="stylesheet">
+
+
+<div class="section group" id="everythingExceptMenubar">
+    <rave-tabs selected='0' tabs="['Photos', 'Data', 'Something else']">
+        <div horizontal layout>
+            <rave-item-list flex horizontal layout>
+                <% for(var i=0; i<items.length; i++) {%>
+                	<li is="rave-item" itemId="<%= JSON.stringify(items[i]) %>"></li>
+                <% } %>
+            </rave-item-list>
+            <rave-item-toolbar horizontal layout></rave-item-toolbar>
+        </div>
+        <div>Two</div>
+        <div>Three</div>
+    </rave-tabs>
+</div>
+
+<!--
+Admincolor pallete: http://paletton.com/#uid=13M0u0kg2qJ6pH+b3vIlklqq+fL
+-->

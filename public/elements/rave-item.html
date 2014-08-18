@@ -1,0 +1,44 @@
+<link rel="import" href="/bower/polymer/polymer.html">
+<link rel="import" href="/bower/paper-ripple/paper-ripple.html">
+
+<polymer-element name="rave-item" attributes="itemId" extends="li">
+    <template>
+        <style type="text/css">
+            :host {
+                list-style-type: none;
+                background: #7584AA;
+            }
+            #content{
+                width: calc(100% - 4em);
+                margin: 1em;
+                padding: 1em;
+            }
+            paper-ripple{
+                color: #fff;
+            }
+        </style>
+        <div id="content">
+            <table>
+                <tr>
+                    <td>1</td>
+                    <td>1</td>
+                </tr>
+            </table>
+            <paper-ripple class="recenteringTouch" fit=""></paper-ripple>
+        </div>
+        <paper-shadow z="1"></paper-shadow>
+    </template>
+    <script>
+        /*global Polymer*/
+        Polymer('rave-item', {
+            domReady: function() {
+                var obj = JSON.parse(this.itemId);
+                var table = "<table>";
+                for(var propt in obj){
+                    table = table + "<tr><td>"+propt+"</td> <td>"+obj[propt]+"</td></tr>";
+                }
+                this.$.content.innerHTML= table + "</table>";
+            }
+        });
+    </script>
+</polymer-element>

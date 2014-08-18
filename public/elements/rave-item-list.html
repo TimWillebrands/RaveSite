@@ -1,0 +1,48 @@
+<link rel="import" href="/bower/polymer/polymer.html">
+
+<polymer-element name="rave-item-list">
+    <template>
+        <style type="text/css">
+            core-header-panel{
+                margin: 1em;
+                background: #4F618F;
+            }
+            core-toolbar{
+                background: #A9B3CD;
+            }
+            polyfill-next-selector { 
+                content: ':host > .selected'; 
+            }
+            ul{
+                padding: 0;
+            }
+            ::content > .selected {
+                font-weight: bold;
+                background: #A9B3CD;
+            }
+        </style>
+        <core-header-panel flex mode="waterfall">
+            <core-toolbar>Items</core-toolbar>
+            <div class="content" style="padding: 1em;">
+                <ul on-tap="{{itemTapAction}}">
+                    <content></content>
+                </ul>
+            </div>
+         <core-selection id="selection" on-core-select="{{selectAction}}"></core-selection>
+        </core-header-panel>
+    </template>
+    <script>
+        /*global Polymer*/
+        Polymer('rave-item-list', {
+            itemTapAction: function(e, detail, sender) {
+                this.$.selection.select(e.target);
+            },
+            selectAction: function(e, detail, sender) {
+                detail.item.classList.toggle('selected', detail.isSelected);
+                if(detail.isSelected){
+                    this.parentNode.getElementsByTagName("rave-item-toolbar")[0].selected = detail.item;
+                }
+            }
+        });
+    </script>
+</polymer-element>

@@ -1,0 +1,64 @@
+<link rel="import" href="/bower/polymer/polymer.html">
+<link rel="import" href="/bower/paper-button/paper-button.html">
+
+<polymer-element name="rave-item-toolbar">
+    <template>
+        <style type="text/css">
+            #my-button{
+                background: #7584AA;
+                color: #A9B3CD;
+                font-size: large;
+                margin: .2em;
+            }
+            core-header-panel{
+                width: 30em;
+                margin: 1em;
+                background: #4F618F;
+            }
+            core-toolbar{
+                background: #A9B3CD;
+            }
+        </style>
+        <core-header-panel id="panel" flex mode="waterfall">
+            <core-toolbar>Toolbar</core-toolbar>
+            <div class="content" style="padding: 1em 5em 1em 1em;">
+                <paper-button id="my-button" raisedButton="true" label="New item" icon="create"></paper-button>
+                <paper-button id="my-button" raisedButton="true" label="Move item up" icon="arrow-back"></paper-button>
+                <paper-button id="my-button" raisedButton="true" label="Move item down" icon="arrow-forward"></paper-button>
+                <paper-button id="my-button" raisedButton="true" label="Delete item" icon="delete"></paper-button>
+                </br>
+                <div id="specButtons" style="margin-top: 1em;">
+                    <paper-button id="my-button" raisedButton="true" label="Add photo" icon="picture-in-picture" disabled></paper-button>
+                    <paper-button id="my-button" raisedButton="true" label="Move photo up" icon="arrow-back" disabled></paper-button>
+                    <paper-button id="my-button" raisedButton="true" label="Move photo down" icon="arrow-forward" disabled></paper-button>
+                    <paper-button id="my-button" raisedButton="true" label="Remove photo" icon="delete" disabled></paper-button>
+                </div>
+            </div>
+        </core-header-panel>
+    </template>
+    <script>
+        /*global Polymer lib*/
+        Polymer('rave-item-toolbar', {
+            selected: "",
+            specButtons: '',
+            domReady: function() {
+                this.specButtons = this.$.panel.querySelector("#specButtons");
+            },
+            selectedChanged: function(oldValue, newValue) {
+                var children = this.specButtons.childNodes;
+                console.log(children)
+                if(newValue.getAttribute("is") == "rave-item"){
+                    for(var i=0; i < children.length; i++){
+                        if(children[i].setAttribute)
+                            children[i].setAttribute("disabled","false");
+                    }
+                }else{// Nothing is selected
+                    for(var i=0; i < children.length; i++){
+                        if(children[i].setAttribute)
+                            children[i].setAttribute("disabled","true");
+                    }
+                }
+            }
+        });
+    </script>
+</polymer-element>
