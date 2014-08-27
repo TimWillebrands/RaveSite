@@ -1,7 +1,7 @@
 <link rel="import" href="/bower/polymer/polymer.html">
 <link rel="import" href="/bower/paper-ripple/paper-ripple.html">
 
-<polymer-element name="rave-item" attributes="itemId" extends="li">
+<polymer-element name="rave-item" attributes="title description thumbnail photos" extends="li">
     <template>
         <style type="text/css">
             :host {
@@ -32,12 +32,11 @@
         /*global Polymer*/
         Polymer('rave-item', {
             domReady: function() {
-                var obj = JSON.parse(this.itemId);
                 var table = "<table>";
-                for(var propt in obj){
-                    table = table + "<tr><td>"+propt+"</td> <td>"+obj[propt]+"</td></tr>";
-                }
-                this.$.content.innerHTML= table + "</table>";
+                table += "<tr class='title'><td class='key'>title</td> <td class='value'>"+this.title+"</td></tr>";
+                table += "<tr class='description'><td class='key'>description</td> <td class='value'>"+this.description+"</td></tr>";
+                table += "<tr class='thumbnail'><td class='key'>thumbnail</td> <td class='value'>"+this.thumbnail+"</td></tr>";
+                this.$.content.innerHTML= table + "</table> <paper-ripple class=\"recenteringTouch\" fit></paper-ripple>";
             }
         });
     </script>

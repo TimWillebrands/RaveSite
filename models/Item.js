@@ -2,13 +2,23 @@ var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
 
-var photoSchema = mongoose.Schema({
- 
-    _itemId:        Schema.Types.ObjectId,   title: Str         ing,
-    description: Stri   ng,
-    thumbnail: Strin     g,
-    url: String           ,
+var itemSchema = mongoose.Schema({
+    
+    title:          String,
+    description:    String,
+    thumbnail:      String,
+    photos:         [String]
 });
 
+itemSchema.methods.addPhoto = function (photo) {
+    this.photos.push(photo.id);
+    photo.item = this.id;
+    photo.save(function (err) {
+        if (err) return console.error(err);
+    });
+    this.save(function (err) {
+        if (err) return console.error(err);
+    });
+};
 
-    photoIds:       [Number]module.exports = mongoose.model('user', photoSchema);
+module.exports = mongoose.model('item', itemSchema);

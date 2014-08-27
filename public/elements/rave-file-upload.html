@@ -1,0 +1,45 @@
+<link rel="import" href="/bower/polymer/polymer.html">
+<link rel="import" href="/bower/paper-ripple/paper-ripple.html">
+<link rel="import" href="/bower/core-ajax/core-ajax.html">
+<link rel="import" href="/bower/paper-button/paper-button.html">
+
+<polymer-element name="rave-file-upload" attributes="itemId">
+    <template>
+        <style type="text/css">
+        </style>
+        <input type="file" name="File" id="file" on-change="{{setFiles}}">
+
+        <core-ajax id="ajax" url="/admin/photo" method="POST" handleAs="json" response="{{response}}"></core-ajax>
+    </template>
+    <script>
+        /*global Polymer*/
+        Polymer('rave-file-upload', {
+            itemId: 0,
+            formData: null,
+            setFiles: function(e, detail, sender) {
+                this.formData = new FormData();
+                
+                for (var i = 0, f; f = sender.files[i]; ++i) {
+                    this.formData.append(sender.name, f, this.$.name ? this.$.name.value : f.name);
+                    //console.log(sender.name, f, this.$.name ? this.$.name.value : f.name);
+                }
+                this.formData.append("title","New Photo");
+                this.formData.append("description","A perestine new photo");
+    
+                // Override default type set by core-ajax.
+                // Allow browser to set the mime multipart content type itself. 
+                this.$.ajax.contentType = null;
+            },
+            
+            upload: function(e, detail, sender) {
+                if (!this.$.file.files.length) {
+                    alert('Please include a file');
+                    return;
+                }
+                this.formData.append("item",this.itemId);
+                this.$.ajax.body = this.formData;
+                this.$.ajax.go();
+            }
+        });
+    </script>
+</polymer-element>

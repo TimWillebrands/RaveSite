@@ -7,7 +7,8 @@
 		"mongoose": "~3.8.8",
 		"ejs": "~1.0.0",
         "qwery": "x.x.x",
-        "flickr-with-uploads": "*"
+        "flickr-with-uploads": "*",
+        "busboy": "*"
 	},
     "engines": {
         "node": "0.10.x"

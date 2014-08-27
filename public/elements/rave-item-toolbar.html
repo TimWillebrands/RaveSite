@@ -1,10 +1,14 @@
 <link rel="import" href="/bower/polymer/polymer.html">
 <link rel="import" href="/bower/paper-button/paper-button.html">
+<link rel="import" href="/bower/paper-dialog/paper-dialog.html">
+<link rel="import" href="/bower/paper-input/paper-input.html">
+<link rel="import" href="/public/elements/rave-file-upload.html">
+<link rel="import" href="/bower/core-ajax/core-ajax.html">
 
 <polymer-element name="rave-item-toolbar">
     <template>
         <style type="text/css">
-            #my-button{
+            .my-button{
                 background: #7584AA;
                 color: #A9B3CD;
                 font-size: large;
@@ -18,46 +22,97 @@
             core-toolbar{
                 background: #A9B3CD;
             }
+            paper-dialog{
+                background: #A9B3CD;
+            }
         </style>
         <core-header-panel id="panel" flex mode="waterfall">
             <core-toolbar>Toolbar</core-toolbar>
             <div class="content" style="padding: 1em 5em 1em 1em;">
-                <paper-button id="my-button" raisedButton="true" label="New item" icon="create"></paper-button>
-                <paper-button id="my-button" raisedButton="true" label="Move item up" icon="arrow-back"></paper-button>
-                <paper-button id="my-button" raisedButton="true" label="Move item down" icon="arrow-forward"></paper-button>
-                <paper-button id="my-button" raisedButton="true" label="Delete item" icon="delete"></paper-button>
+                <paper-button class="my-button" raisedButton="true" label="New item" icon="create" on-click="{{newItem}}"></paper-button>
+                <paper-button class="my-button" raisedButton="true" label="Move item up" icon="arrow-back" on-click="{{upItem}}"></paper-button>
+                <paper-button class="my-button" raisedButton="true" label="Move item down" icon="arrow-forward" on-click="{{downItem}}"></paper-button>
+                <paper-button class="my-button" raisedButton="true" label="Delete item" icon="delete" on-click="{{deleteItem}}"></paper-button>
                 </br>
                 <div id="specButtons" style="margin-top: 1em;">
-                    <paper-button id="my-button" raisedButton="true" label="Add photo" icon="picture-in-picture" disabled></paper-button>
-                    <paper-button id="my-button" raisedButton="true" label="Move photo up" icon="arrow-back" disabled></paper-button>
-                    <paper-button id="my-button" raisedButton="true" label="Move photo down" icon="arrow-forward" disabled></paper-button>
-                    <paper-button id="my-button" raisedButton="true" label="Remove photo" icon="delete" disabled></paper-button>
+                    <paper-button class="my-button" raisedButton="true" label="Add photo" icon="picture-in-picture" on-click="{{newPhoto}}" disabled></paper-button>
+                    <paper-button class="my-button" raisedButton="true" label="Move photo up" icon="arrow-back" on-click="{{upPhoto}}" disabled></paper-button>
+                    <paper-button class="my-button" raisedButton="true" label="Move photo down" icon="arrow-forward" on-click="{{downPhoto}}" disabled></paper-button>
+                    <paper-button class="my-button" raisedButton="true" label="Remove photo" icon="delete" on-click="{{deletePhoto}}" disabled></paper-button>
                 </div>
             </div>
         </core-header-panel>
+        <paper-dialog id="photoDialog" heading="Pick photo upload method">
+            <!--<div style="border-bottom: rgb(12, 53, 90) 1px; border-style: solid; margin-bottom: 1em;">
+                <paper-input label="Photo url" ></paper-input>
+                <paper-button class="my-button" label="Enter Url"  on-click="{{usePhotoUrl}}" affirmative></paper-button>
+            </div>-->
+            <div>
+                <rave-file-upload id="fileUpload"></rave-file-upload>
+                <paper-button class="my-button" label="Upload Photo" on-click="{{uploadPhoto}}" affirmative autofocus></paper-button>
+            </div>
+        </paper-dialog>
     </template>
     <script>
         /*global Polymer lib*/
         Polymer('rave-item-toolbar', {
-            selected: "",
+            selected: null, //Is set by the list and not this element
             specButtons: '',
             domReady: function() {
-                this.specButtons = this.$.panel.querySelector("#specButtons");
+                this.specButtons = this.$.specButtons;
+                this.parentNode.getElementsByTagName("rave-item-list")[0].getItemList();
             },
             selectedChanged: function(oldValue, newValue) {
                 var children = this.specButtons.childNodes;
-                console.log(children)
                 if(newValue.getAttribute("is") == "rave-item"){
                     for(var i=0; i < children.length; i++){
                         if(children[i].setAttribute)
-                            children[i].setAttribute("disabled","false");
+                            children[i].removeAttribute("disabled");
                     }
                 }else{// Nothing is selected
                     for(var i=0; i < children.length; i++){
                         if(children[i].setAttribute)
-                            children[i].setAttribute("disabled","true");
+                            children[i].setAttribute("disabled","");
                     }
                 }
+            },
+            newItem: function(a,b,c){
+                var ajax = document.createElement('core-ajax');
+                ajax.method = "POST";
+                ajax.url = "/admin/item";
+                ajax.addEventListener('core-complete',function(){
+                    console.log("response: " + ajax.response);
+                    ajax.remove();
+                }); 
+                ajax.go();
+            },
+            upItem: function(a,b,c){
+                console.log("ASD");
+            },
+            downItem: function(a,b,c){
+                console.log("ASD");
+            },
+            deleteItem: function(a,b,c){
+                console.log("ASD");
+            },
+            newPhoto: function(a,b,c){
+                this.$.photoDialog.toggle();
+            },
+            upPhoto: function(a,b,c){
+                console.log("ASD");
+            },
+            downPhoto: function(a,b,c){
+                console.log("ASD");
+            },
+            deletePhoto: function(a,b,c){
+                console.log("ASD");
+            },
+            usePhotoUrl: function(a,b,c){
+                console.log("ASD");
+            },
+            uploadPhoto: function(a,b,c){
+                this.$.fileUpload.itemId = this.selected.$.content.querySelector("._id .value").innerHTML;
+                this.$.fileUpload.upload();
             }
         });
     </script>
