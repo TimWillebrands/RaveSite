@@ -43,12 +43,12 @@ module.exports.controller = function(app) {
             
     		writeFile.on('finish',function(){
                 flickr.uploadImageToFlickr(saveTo,{
-                    title : filename,
+                    name : filename,
                     description: "Mah new bud",
                 },function(image){
                     flickr.getPhotoUrl(image.photo_id,function(photos){
                         var photo = new Photo({
-                            title: image.title,
+                            name: image.name,
                             description: image.description,
                             thumbnail: photos.thumbnail,
                             url: photos.original,
@@ -99,7 +99,7 @@ module.exports.controller = function(app) {
     authRoutes.route('/item')
     .post(function(req, res) {
         var item = new Item({
-            title: "Super item title",
+            name: "Super item title",
             description: "Super item description",
             thumbnail: "http://www.msgplus.net/Documents/cd0466a1-77cb-4bfb-a130-851d1079de0b/Thumbnail.jpg"
         });

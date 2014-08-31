@@ -1,83 +1,51 @@
 <link rel="import" href="/bower/polymer/polymer.html">
+<link rel="import" href="/bower/core-selector/core-selector.html">
+<link rel="import" href="/public/elements/rave-item.html">
 
 <polymer-element name="rave-item-list">
     <template>
         <style type="text/css">
-            core-header-panel{
-                margin: 1em;
-                background: #4F618F;
-            }
-            core-toolbar{
-                background: #A9B3CD;
-            }
-            polyfill-next-selector { 
-                content: ':host > .selected'; 
-            }
-            ul{
-                padding: 0;
-            }
-            ::content > .selected {
-                font-weight: bold;
-                background: #A9B3CD;
-            }
+            core-header-panel{margin:1em;background:#4F618F}core-toolbar{background:#A9B3CD}#daContent>.selected{font-weight:700;background:#A9B3CD}
         </style>
         <core-header-panel flex mode="waterfall">
             <core-toolbar>Items</core-toolbar>
-            <div class="content" style="padding: 1em;">
-                <ul id="itemList" on-tap="{{itemTapAction}}">
-                    <content></content>
-                </ul>
-            </div>
-         <core-selection id="selection" on-core-select="{{selectAction}}"></core-selection>
+            <core-selector id="daContent" style="padding: 1em;" on-core-select="{{ selectAction }}"></core-selector>
         </core-header-panel>
     </template>
     <script>
         /*global Polymer*/
         Polymer('rave-item-list', {
-            ready: function(){
+            domReady: function(){
                 this.updateList();
             },
             updateList: function(){
                 var ajax = document.createElement('core-ajax');
-                var innerHTML = "";
-                var itemList = this.$.itemList;
+                var content = this.$.daContent;
                 ajax.method = "GET";
                 ajax.url = "/admin/item";
                 ajax.addEventListener('core-complete',function(){
                     var items = JSON.parse(ajax.response);
                     for(var i=0; i<items.length; i++) {
-                        var raveItem  = document.createElement('rave-item');
-                        //raveItem.setAttribute("is","rave-item");
-                        raveItem.setAttribute("title",items[i].title);
-                        raveItem.setAttribute("description",items[i].description);
-                        raveItem.setAttribute("thumbnail",items[i].thumbnail);
-                        raveItem.setAttribute("photos",items[i].photos);
-                        itemList.appendChild(raveItem);
-                        console.log(raveItem.title);
-                        //innerHTML = innerHTML + '<li is="rave-item" itemId=\''+ JSON.stringify(items[i]) +'\'></li>';
+                        var newItem  = document.createElement('rave-item');
+                        newItem.name = items[i].name;
+                        newItem.description = items[i].description;
+                        newItem.thumbnail = items[i].thumbnail;
+                        newItem.photos = items[i].photos;
+                        content.appendChild(newItem);
                     }
-                    //itemList.innerHTML = innerHTML;
                     ajax.remove();
                 }); 
                 ajax.go();
             },
-            itemTapAction: function(e, detail, sender) {
-                this.$.selection.select(e.target);
-            },
             selectAction: function(e, detail, sender) {
-                detail.item.classList.toggle('selected', detail.isSelected);
+                console.log("Item list: ",this.getItemList());
+                detail.item.toggleSelection(detail.isSelected);
                 if(detail.isSelected){
                     this.parentNode.getElementsByTagName("rave-item-toolbar")[0].selected = detail.item;
                 }
             },
             getItemList: function(){
-                var desiredChildren = [];
-                var children = this.childNodes;
-                for(var i=0; i < children.length; i++){
-                    if(children[i].setAttribute)
-                        desiredChildren.push(children[i]);
-                }
-                return desiredChildren;
+                return this.$.daContent.items;
             }
         });
     </script>

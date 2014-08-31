@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 
 var itemSchema = mongoose.Schema({
     
-    title:          String,
+    name:          String,
     description:    String,
     thumbnail:      String,
     photos:         [String]

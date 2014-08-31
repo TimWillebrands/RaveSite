@@ -1,42 +1,64 @@
 <link rel="import" href="/bower/polymer/polymer.html">
 <link rel="import" href="/bower/paper-ripple/paper-ripple.html">
+<link rel="import" href="/bower/paper-input/paper-input.html">
+<link rel="import" href="/bower/paper-button/paper-button.html">
 
-<polymer-element name="rave-item" attributes="title description thumbnail photos" extends="li">
+<polymer-element name="rave-item" attributes="name description thumbnail photos">
     <template>
         <style type="text/css">
-            :host {
-                list-style-type: none;
-                background: #7584AA;
-            }
             #content{
                 width: calc(100% - 4em);
                 margin: 1em;
                 padding: 1em;
+                background: #7584AA;
+            }
+            #content.selected{
+                font-weight: bold;
+                background: #A9B3CD;
             }
             paper-ripple{
                 color: #fff;
             }
+            paper-input{
+                width: 50em;
+            }
+            .key{
+                position: relative;
+                top: .5em;
+                display: block;
+                width: 100px;
+                float: left;
+            }
+            .my-button{
+                background: #7584AA;
+                color: #A9B3CD;
+                font-size: large;
+                position: absolute;
+                top: 1em;
+                right: 1em;
+            }
         </style>
         <div id="content">
-            <table>
-                <tr>
-                    <td>1</td>
-                    <td>1</td>
-                </tr>
-            </table>
-            <paper-ripple class="recenteringTouch" fit=""></paper-ripple>
+            <span class="key">Name: </span> <paper-input on-input="{{inputChanged}}" label="{{name}}"></paper-input></br>
+            <span class="key">Description: </span> <paper-input on-input="{{inputChanged}}" multiline label="{{description}}"></paper-input></br>
+            <span class="key">Thumbnail: </span> <paper-input on-input="{{inputChanged}}" label="{{thumbnail}}"></paper-input></br>
+            <paper-shadow z="1"></paper-shadow>
+            <paper-button id="save" class="my-button" raisedButton="true" label="Save" icon="done" on-click="{{newPhoto}}" disabled></paper-button>
         </div>
-        <paper-shadow z="1"></paper-shadow>
     </template>
     <script>
         /*global Polymer*/
         Polymer('rave-item', {
-            domReady: function() {
-                var table = "<table>";
-                table += "<tr class='title'><td class='key'>title</td> <td class='value'>"+this.title+"</td></tr>";
-                table += "<tr class='description'><td class='key'>description</td> <td class='value'>"+this.description+"</td></tr>";
-                table += "<tr class='thumbnail'><td class='key'>thumbnail</td> <td class='value'>"+this.thumbnail+"</td></tr>";
-                this.$.content.innerHTML= table + "</table> <paper-ripple class=\"recenteringTouch\" fit></paper-ripple>";
+            toggleSelection: function(state){
+                console.log("Item: ", state);
+                if(state){ 
+                    this.$.content.setAttribute("class", "selected");
+                }else{
+                    this.$.content.removeAttribute("class");
+                }
+            },
+            inputChanged: function(state){
+                this.$.save.disabled = false;
             }
         });
     </script>
