@@ -9,7 +9,7 @@
 		"ejs": "~1.0.0",
         "qwery": "x.x.x",
         "flickr-with-uploads": "*",
-        "busboy": "*"
+        "busboy": "*",
         "bower": "~1.3.3"
 	},
     "engines": {
