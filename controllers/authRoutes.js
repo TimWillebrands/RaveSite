@@ -162,20 +162,37 @@ module.exports.controller = function(app) {
 	});
 	
     authRoutes.route('/item/:item_id')
-    .post(function(req, res) { // Crteate item
+    .post(function(req, res) { // Update item
 		Item.findById(req.params.item_id, function(err, item) {
 			if (err) {res.send(err)}
 			var itemProps = req.body;
-			    console.log(itemProps);
+			if(itemProps.photos){
+			    for(var photoId in itemProps.photos){
+			        updatePhoto(photoId, itemProps.photos[photoId]);
+			    }
+			}
+			    
 			for(var propt in itemProps){
-                item[propt] = itemProps[propt];
+			    if(propt != "photos")
+                    item[propt] = itemProps[propt];
             }
             
             item.save(function (err) {
                 if (err) return console.error(err);
-                res.send("done");
+                res.json({status: "succes"});
             });
 		});
+		
+		function updatePhoto(photoId, data){
+		    Photo.findById(photoId,function(err, photo){
+		        for(var propt in data){
+		            photo[propt] = data[propt];
+		        }
+		        photo.save(function(err){
+		            if(err) console.error(err);
+		        });
+		    });
+		}
 	})
     .get(function(req, res) { // Get item
 		Item.findById(req.params.item_id, function(err, item) {
@@ -184,7 +201,6 @@ module.exports.controller = function(app) {
 		});
 	})
 	.put(function(req, res) { //Sort photos of item
-	console.log("SAdsdaasd");
 		var photos = req.body;
 		var photoIds = [];
 		
@@ -198,10 +214,24 @@ module.exports.controller = function(app) {
         }
         
         function sortItemList(id,photoIds){ // Called when last photo index is saved
-            Photo.find({
-                '_id': { $in: photoIds}
-            }).sort('index').exec(function(err, sortedPhoto) {
-                console.log(sortedPhoto._id);
+            Item.findById(id, function(err, item){
+                var photoCount = item.photos.length;
+                var photos = [];
+                Photo.find({
+                    '_id': { $in: photoIds}
+                }).sort('index').exec(function(err, sortedPhotos) {
+                    sortedPhotos.forEach(function(sortedPhoto){
+                        photos.push(sortedPhoto.id);
+                        if(photos.length==photoCount){ // Ugly hack to check if last iteration
+                            item.photos = photos;
+                            item.save(function(err, savedItem){
+                                res.json({status:"succes"});
+                                console.log("Item: ",savedItem.id,"sorted");
+                            });
+                        }
+                    });
+                });
+                
             });
         }
 	})

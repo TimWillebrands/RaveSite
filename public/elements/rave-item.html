@@ -63,6 +63,7 @@
             naime: "",
             description: "",
             thumbnail: "",
+            changedPhotos: {},
             updateItem:function(){
                 var ajax = document.createElement('core-ajax');
                 var t = this;
@@ -78,7 +79,7 @@
                         var newPhoto  = document.createElement('rave-photo');
                         newPhoto.photoId = photoId;
                         newPhoto.toolbar = t.toolbar;
-                        newPhoto.saveButton = t.$.save;
+                        newPhoto.parentItem = t;
                         t.$.photoList.appendChild(newPhoto);
                     });
                     
@@ -104,8 +105,11 @@
                 console.log("unselect photo");
                 this.$.photoList.selected = null;
             },
+            setButton: function(state){
+                this.$.save.disabled = state;
+            },
             saveItem: function(){
-                var itemProps = {};
+                var itemProps = {photos: this.changedPhotos};
                 if(this.$.name.inputValue)
                     itemProps.name = this.$.name.inputValue;
                 if(this.$.description.inputValue)
@@ -114,6 +118,7 @@
                     itemProps.thumbnail = this.$.thumbnail.inputValue;
                 
                 var ajax = document.createElement('core-ajax');
+                var overlay = document.body.overlay;
                 var t = this;
                 ajax.method = "POST";
                 ajax.handleAs = "json";
@@ -127,9 +132,13 @@
                     t.$.description.inputValue = "";
                     t.$.thumbnail.inputValue = "";
                     ajax.remove();
+                    setTimeout(function(){
+                        overlay.style.display = "none";
+                    },500);
                 }); 
                 
                 ajax.go();
+                overlay.style.display = "block";
             },
             getItemList: function(){
                 return this.$.photoList.items;
