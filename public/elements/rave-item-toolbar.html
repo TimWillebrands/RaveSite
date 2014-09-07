@@ -30,15 +30,17 @@
             <core-toolbar>Toolbar</core-toolbar>
             <div class="content" style="padding: 1em 5em 1em 1em;">
                 <paper-button class="my-button" raisedButton="true" label="New item" icon="create" on-click="{{newItem}}"></paper-button>
-                <paper-button class="my-button" raisedButton="true" label="Move item up" icon="arrow-back" on-click="{{upItem}}"></paper-button>
-                <paper-button class="my-button" raisedButton="true" label="Move item down" icon="arrow-forward" on-click="{{downItem}}"></paper-button>
-                <paper-button class="my-button" raisedButton="true" label="Delete item" icon="delete" on-click="{{deleteItem}}"></paper-button>
-                </br>
-                <div id="specButtons" style="margin-top: 1em;">
-                    <paper-button class="my-button" raisedButton="true" label="Add photo" icon="picture-in-picture" on-click="{{newPhoto}}" disabled></paper-button>
-                    <paper-button class="my-button" raisedButton="true" label="Move photo up" icon="arrow-back" on-click="{{upPhoto}}" disabled></paper-button>
-                    <paper-button class="my-button" raisedButton="true" label="Move photo down" icon="arrow-forward" on-click="{{downPhoto}}" disabled></paper-button>
-                    <paper-button class="my-button" raisedButton="true" label="Remove photo" icon="delete" on-click="{{deletePhoto}}" disabled></paper-button>
+                <div id="specButtons">
+                    <paper-button class="my-button" raisedButton="true" label="Move item up" icon="arrow-back" on-click="{{upItem}}" disabled></paper-button>
+                    <paper-button class="my-button" raisedButton="true" label="Move item down" icon="arrow-forward" on-click="{{downItem}}" disabled></paper-button>
+                    <paper-button class="my-button" raisedButton="true" label="Delete item" icon="delete" on-click="{{deleteItem}}" disabled></paper-button>
+                    </br>
+                    <div style="margin-top: 1em;">
+                        <paper-button class="my-button" raisedButton="true" label="Add photo" icon="picture-in-picture" on-click="{{newPhoto}}" disabled></paper-button>
+                        <paper-button class="my-button photo" raisedButton="true" label="Move photo up" icon="arrow-back" on-click="{{upPhoto}}" disabled></paper-button>
+                        <paper-button class="my-button photo" raisedButton="true" label="Move photo down" icon="arrow-forward" on-click="{{downPhoto}}" disabled></paper-button>
+                        <paper-button class="my-button photo" raisedButton="true" label="Delete photo" icon="delete" on-click="{{deletePhoto}}" disabled></paper-button>
+                    </div>
                 </div>
             </div>
         </core-header-panel>
@@ -48,23 +50,43 @@
                 <paper-button class="my-button" label="Enter Url"  on-click="{{usePhotoUrl}}" affirmative></paper-button>
             </div>-->
             <div>
-                <rave-file-upload id="fileUpload"></rave-file-upload>
+                <rave-file-upload id="fileUpload" item="{{selectedItem}}"></rave-file-upload>
                 <paper-button class="my-button" label="Upload Photo" on-click="{{uploadPhoto}}" affirmative autofocus></paper-button>
+                <paper-button class="my-button" label="Cancel" affirmative autofocus></paper-button>
             </div>
         </paper-dialog>
     </template>
     <script>
         /*global Polymer lib*/
         Polymer('rave-item-toolbar', {
-            selected: null, //Is set by the list and not this element
+            selectedItem: null, //Is set by the list and not this element
+            selectedPhoto: null, //Is set by the list and not this element
             specButtons: '',
             domReady: function() {
                 this.specButtons = this.$.specButtons;
-                this.parentNode.getElementsByTagName("rave-item-list")[0].getItemList();
+                this.parentNode.querySelector("#itemList").getItemList();
             },
-            selectedChanged: function(oldValue, newValue) {
-                var children = this.specButtons.childNodes;
-                if(newValue.getAttribute("is") == "rave-item"){
+            selectedItemChanged: function(oldValue, newValue) {
+                if(oldValue) {
+                    this.selectedPhoto = null;
+                    oldValue.unSelectPhoto();
+                }
+                var children = this.specButtons.querySelectorAll('.my-button');
+                if(newValue.tagName  == "RAVE-ITEM"){
+                    for(var i=0; i < children.length; i++){
+                        if(children[i].setAttribute && !children[i].classList.contains("photo"))
+                            children[i].removeAttribute("disabled");
+                    }
+                }else{// Nothing is selected
+                    for(var i=0; i < children.length; i++){
+                        if(children[i].setAttribute)
+                            children[i].setAttribute("disabled","");
+                    }
+                }
+            },
+            selectedPhotoChanged: function(oldValue, newValue) {
+                var children = this.specButtons.querySelectorAll('.photo');
+                if(newValue !== null && newValue.tagName  == "RAVE-PHOTO"){
                     for(var i=0; i < children.length; i++){
                         if(children[i].setAttribute)
                             children[i].removeAttribute("disabled");
@@ -76,42 +98,97 @@
                     }
                 }
             },
-            newItem: function(a,b,c){
+            newItem: function(){
                 var ajax = document.createElement('core-ajax');
+                var list = this.parentNode.querySelector("#itemList");
+                var overlay = document.body.overlay;
                 ajax.method = "POST";
                 ajax.url = "/admin/item";
                 ajax.addEventListener('core-complete',function(){
                     console.log("response: " + ajax.response);
                     ajax.remove();
+                    list.updateList();
+                    setTimeout(function(){
+                        overlay.style.display = "none";
+                    },800);
                 }); 
                 ajax.go();
+                overlay.style.display = "block";
             },
-            upItem: function(a,b,c){
-                console.log("ASD");
+            upItem: function(){
+                var node = this.selectedItem,
+                    parent = node.parentNode,
+                    list = this.parentNode.querySelector("#itemList"),
+                    prev = node.previousSibling;
+                parent.insertBefore( node, prev );
+                list.selectPrevious();
+                list.saveItemOrder();
             },
-            downItem: function(a,b,c){
-                console.log("ASD");
+            downItem: function(){
+                var node = this.selectedItem,
+                    parent = node.parentNode,
+                    list = this.parentNode.querySelector("#itemList"),
+                    next = node.nextSibling.nextSibling;
+                parent.insertBefore( node, next );
+                list.selectNext();
+                list.saveItemOrder();
             },
-            deleteItem: function(a,b,c){
-                console.log("ASD");
+            deleteItem: function(){
+                var overlay = document.body.overlay;
+                var list = this.parentNode.querySelector("#itemList");
+                var ajax = document.createElement('core-ajax');
+                ajax.method = "DELETE";
+                ajax.url = "/admin/item/" + this.selectedItem.itemId;
+                ajax.addEventListener('core-complete',function(){
+                    console.log("response: " + ajax.response);
+                    ajax.remove();
+                    list.updateList();
+                    setTimeout(function(){
+                        overlay.style.display = "none";
+                    },800);
+                }); 
+                ajax.go();
+                overlay.style.display = "block";
             },
             newPhoto: function(a,b,c){
                 this.$.photoDialog.toggle();
             },
-            upPhoto: function(a,b,c){
-                console.log("ASD");
+            upPhoto: function(){
+                var node = this.selectedPhoto,
+                    parent = node.parentNode,
+                    list = this.selectedItem,
+                    prev = node.previousSibling;
+                parent.insertBefore( node, prev );
+                list.selectPrevious();
+                list.savePhotoOrder();
             },
-            downPhoto: function(a,b,c){
-                console.log("ASD");
+            downPhoto: function(){
+                var node = this.selectedPhoto,
+                    parent = node.parentNode,
+                    list = this.selectedItem,
+                    next = node.nextSibling.nextSibling;
+                parent.insertBefore( node, next );
+                list.selectNext();
+                list.savePhotoOrder();
             },
             deletePhoto: function(a,b,c){
-                console.log("ASD");
-            },
-            usePhotoUrl: function(a,b,c){
-                console.log("ASD");
+                var overlay = document.body.overlay;
+                console.log(this.selectedItem);
+                var item = this.selectedItem;
+                var ajax = document.createElement('core-ajax');
+                ajax.method = "DELETE";
+                ajax.url = "/admin/photo/" + this.selectedPhoto.photoId;
+                ajax.addEventListener('core-complete',function(){
+                    ajax.remove();
+                    item.updateItem();
+                    setTimeout(function(){
+                        overlay.style.display = "none";
+                    },1200);
+                }); 
+                ajax.go();
+                overlay.style.display = "block";
             },
             uploadPhoto: function(a,b,c){
-                this.$.fileUpload.itemId = this.selected.$.content.querySelector("._id .value").innerHTML;
                 this.$.fileUpload.upload();
             }
         });

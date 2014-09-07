@@ -5,7 +5,7 @@
 <polymer-element name="rave-item-list">
     <template>
         <style type="text/css">
-            core-header-panel{margin:1em;background:#4F618F}core-toolbar{background:#A9B3CD}#daContent>.selected{font-weight:700;background:#A9B3CD}
+        core-header-panel{margin:1em;background:#4F618F}core-toolbar{background:#A9B3CD}#daContent>.selected{font-weight:700;background:#A9B3CD}
         </style>
         <core-header-panel flex mode="waterfall">
             <core-toolbar>Items</core-toolbar>
@@ -13,24 +13,31 @@
         </core-header-panel>
     </template>
     <script>
+        function getIndex(array, element){
+            for(var i = 0; i < array.length; i++){
+                if(array[i] == element)
+                    return i;
+            }
+            return -1;
+        }
         /*global Polymer*/
         Polymer('rave-item-list', {
-            domReady: function(){
+            ready: function(){
                 this.updateList();
             },
             updateList: function(){
                 var ajax = document.createElement('core-ajax');
                 var content = this.$.daContent;
+                var toolbar = this.parentNode.querySelector("#itemToolbar");
+                content.innerHTML = "";
                 ajax.method = "GET";
                 ajax.url = "/admin/item";
                 ajax.addEventListener('core-complete',function(){
                     var items = JSON.parse(ajax.response);
                     for(var i=0; i<items.length; i++) {
                         var newItem  = document.createElement('rave-item');
-                        newItem.name = items[i].name;
-                        newItem.description = items[i].description;
-                        newItem.thumbnail = items[i].thumbnail;
-                        newItem.photos = items[i].photos;
+                        newItem.itemId = items[i];
+                        newItem.toolbar = toolbar;
                         content.appendChild(newItem);
                     }
                     ajax.remove();
@@ -38,14 +45,40 @@
                 ajax.go();
             },
             selectAction: function(e, detail, sender) {
-                console.log("Item list: ",this.getItemList());
                 detail.item.toggleSelection(detail.isSelected);
-                if(detail.isSelected){
-                    this.parentNode.getElementsByTagName("rave-item-toolbar")[0].selected = detail.item;
-                }
+                /*if(detail.isSelected){
+                    this.parentNode.querySelector("#itemToolbar").selectedItem = detail.item;
+                }*/
             },
             getItemList: function(){
                 return this.$.daContent.items;
+            },
+            selectNext: function(){
+                this.$.daContent.selected += 1;
+            },
+            selectPrevious: function(){
+                this.$.daContent.selected -= 1;
+            },
+            saveItemOrder: function(){
+                var items = this.getItemList();
+                var dataList = [];
+                var ajax = document.createElement('core-ajax');
+                for(var i = 0; i < items.length; i++){
+                    var data = {};
+                    data.id = items[i].itemId;
+                    data.index = getIndex(items, items[i]);
+                    dataList.push(data);
+                }
+                ajax.method = "POST";
+                ajax.url = "/admin/item/sort";
+                ajax.handleAs = "json";
+                ajax.contentType = "application/json";
+                ajax.body = JSON.stringify(dataList);
+                ajax.addEventListener('core-complete',function(){
+                    ajax.remove();
+                }); 
+                console.log(ajax.body);
+                ajax.go();
             }
         });
     </script>

@@ -7,8 +7,10 @@ var port            = process.env.PORT || 8080;
 var mongoose        = require('mongoose');
 var fs              = require('fs');
 var compress        = require('compression');
+var bodyParser      = require('body-parser');
 
 app.use(compress());
+app.use(bodyParser.json());
 app.set('view engine', 'ejs');
 
 // HOOKING UP

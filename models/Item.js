@@ -1,16 +1,17 @@
-var mongoose = require('mongoose');
-
-var Schema = mongoose.Schema;
+var mongoose    = require('mongoose');
 
 var itemSchema = mongoose.Schema({
     
-    name:          String,
+    name:           String,
     description:    String,
     thumbnail:      String,
+    index:          Number,
     photos:         [String]
 });
 
 itemSchema.methods.addPhoto = function (photo) {
+    console.log(photo);
+    console.log(this);
     this.photos.push(photo.id);
     photo.item = this.id;
     photo.save(function (err) {

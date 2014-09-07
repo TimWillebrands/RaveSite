@@ -7,7 +7,8 @@ var photoSchema = Schema({
     description:    String,
     thumbnail:      String,
     url:            String,
-    item:           Number,
+    index:          Number,
+    item:           String,
 });
 
 module.exports = mongoose.model('photo', photoSchema);

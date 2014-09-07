@@ -1,21 +1,26 @@
 <link rel="import" href="/bower/polymer/polymer.html">
-<link rel="import" href="/bower/paper-ripple/paper-ripple.html">
 <link rel="import" href="/bower/core-ajax/core-ajax.html">
-<link rel="import" href="/bower/paper-button/paper-button.html">
+<link rel="import" href="/bower/core-overlay/core-overlay.html">
 
-<polymer-element name="rave-file-upload" attributes="itemId">
+<polymer-element name="rave-file-upload" attributes="item">
     <template>
         <style type="text/css">
         </style>
         <input type="file" name="File" id="file" on-change="{{setFiles}}">
-
-        <core-ajax id="ajax" url="/admin/photo" method="POST" handleAs="json" response="{{response}}"></core-ajax>
+        <div id="waitOverlay" autoCloseDisabled style="position: fixed;width: 100%;height: 100%;top: 0;left: 0;display: block;background-color: rgba(100,100,100,.8);display: none;">
+            <img src="https://www.adobe.com/business/calculator/VIP/image/loader.gif" style="position:absolute;width:512px; height:512px;top:calc(50% - 256px);left:calc(50% - 256px);">
+        </div>
     </template>
     <script>
         /*global Polymer*/
         Polymer('rave-file-upload', {
-            itemId: 0,
             formData: null,
+            overlay: null,
+            domReady: function(){
+                this.overlay = this.$.waitOverlay;
+                document.body.appendChild(this.overlay);
+                document.body.overlay = this.overlay;
+            },
             setFiles: function(e, detail, sender) {
                 this.formData = new FormData();
                 
@@ -25,10 +30,6 @@
                 }
                 this.formData.append("title","New Photo");
                 this.formData.append("description","A perestine new photo");
-    
-                // Override default type set by core-ajax.
-                // Allow browser to set the mime multipart content type itself. 
-                this.$.ajax.contentType = null;
             },
             
             upload: function(e, detail, sender) {
@@ -36,9 +37,28 @@
                     alert('Please include a file');
                     return;
                 }
-                this.formData.append("item",this.itemId);
-                this.$.ajax.body = this.formData;
-                this.$.ajax.go();
+                this.formData.append("item",this.item.itemId);
+                var ajax = document.createElement('core-ajax');
+                var item = this.item;
+                var overlay = this.overlay;
+                ajax.handleAs="json";
+                ajax.contentType = null;
+                ajax.method="POST";
+                ajax.body = this.formData;
+                ajax.url = "/admin/photo?itemId=" + item.itemId;
+                ajax.addEventListener('core-complete',function(){
+                    if(ajax.response=="succes"){
+                        item.updateItem();
+                    }else{
+                        console.error(ajax.response);
+                    }
+                    ajax.remove();
+                    setTimeout(function(){
+                        overlay.style.display = "none";
+                    },1200);
+                }); 
+                ajax.go();
+                overlay.style.display = "block";
             }
         });
     </script>

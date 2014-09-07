@@ -2,8 +2,10 @@
 <link rel="import" href="/bower/paper-ripple/paper-ripple.html">
 <link rel="import" href="/bower/paper-input/paper-input.html">
 <link rel="import" href="/bower/paper-button/paper-button.html">
+<link rel="import" href="/bower/core-selector/core-selector.html">
+<link rel="import" href="/public/elements/rave-photo.html">
 
-<polymer-element name="rave-item" attributes="name description thumbnail photos">
+<polymer-element name="rave-item" attributes="itemId index toolbar">
     <template>
         <style type="text/css">
             #content{
@@ -39,26 +41,125 @@
             }
         </style>
         <div id="content">
-            <span class="key">Name: </span> <paper-input on-input="{{inputChanged}}" label="{{name}}"></paper-input></br>
-            <span class="key">Description: </span> <paper-input on-input="{{inputChanged}}" multiline label="{{description}}"></paper-input></br>
-            <span class="key">Thumbnail: </span> <paper-input on-input="{{inputChanged}}" label="{{thumbnail}}"></paper-input></br>
+            <span class="key">Name: </span> <paper-input id="name" on-input="{{inputChanged}}" label="{{naime}}"></paper-input></br>
+            <span class="key">Description: </span> <paper-input id="description" on-input="{{inputChanged}}" multiline label="{{description}}"></paper-input></br>
+            <span class="key">Thumbnail: </span> <paper-input id="thumbnail" on-input="{{inputChanged}}" label="{{thumbnail}}"></paper-input></br>
+            <core-selector id="photoList" style="padding: 1em;" on-core-select="{{ selectPhoto }}"></core-selector>
             <paper-shadow z="1"></paper-shadow>
-            <paper-button id="save" class="my-button" raisedButton="true" label="Save" icon="done" on-click="{{newPhoto}}" disabled></paper-button>
+            <paper-button id="save" class="my-button" raisedButton="true" label="Save" icon="done" on-click="{{saveItem}}" disabled></paper-button>
         </div>
     </template>
     <script>
+        function getIndex(array, element){
+            for(var i = 0; i < array.length; i++){
+                if(array[i] == element)
+                    return i;
+            }
+            return -1;
+        }
+        
         /*global Polymer*/
         Polymer('rave-item', {
+            naime: "",
+            description: "",
+            thumbnail: "",
+            updateItem:function(){
+                var ajax = document.createElement('core-ajax');
+                var t = this;
+                t.$.photoList.innerHTML="";
+                ajax.method = "GET";
+                ajax.url = "/admin/item/" + this.itemId;
+                ajax.addEventListener('core-complete',function(){
+                    var item = JSON.parse(ajax.response);
+                    t.naime = item.name;
+                    t.description = item.description;
+                    t.thumbnail = item.thumbnail;
+                    item.photos.forEach(function(photoId){
+                        var newPhoto  = document.createElement('rave-photo');
+                        newPhoto.photoId = photoId;
+                        newPhoto.toolbar = t.toolbar;
+                        newPhoto.saveButton = t.$.save;
+                        t.$.photoList.appendChild(newPhoto);
+                    });
+                    
+                    ajax.remove();
+                }); 
+                ajax.go();
+            },
+            itemIdChanged:function(){
+                this.updateItem();
+            },
             toggleSelection: function(state){
-                console.log("Item: ", state);
                 if(state){ 
                     this.$.content.setAttribute("class", "selected");
+                    this.toolbar.selectedItem = this;
                 }else{
                     this.$.content.removeAttribute("class");
                 }
             },
             inputChanged: function(state){
                 this.$.save.disabled = false;
+            },
+            unSelectPhoto: function(){
+                console.log("unselect photo");
+                this.$.photoList.selected = null;
+            },
+            saveItem: function(){
+                var itemProps = {};
+                if(this.$.name.inputValue)
+                    itemProps.name = this.$.name.inputValue;
+                if(this.$.description.inputValue)
+                    itemProps.description = this.$.description.inputValue;
+                if(this.$.thumbnail.inputValue)
+                    itemProps.thumbnail = this.$.thumbnail.inputValue;
+                
+                var ajax = document.createElement('core-ajax');
+                var t = this;
+                ajax.method = "POST";
+                ajax.handleAs = "json";
+                ajax.contentType = "application/json";
+                ajax.body = JSON.stringify(itemProps);
+                ajax.url = "/admin/item/" + this.itemId;
+                ajax.addEventListener('core-complete',function(){
+                    t.updateItem();
+                    t.$.save.disabled = true;
+                    t.$.name.inputValue = "";
+                    t.$.description.inputValue = "";
+                    t.$.thumbnail.inputValue = "";
+                    ajax.remove();
+                }); 
+                
+                ajax.go();
+            },
+            getItemList: function(){
+                return this.$.photoList.items;
+            },
+            selectNext: function(){
+                this.$.photoList.selected += 1;
+            },
+            selectPrevious: function(){
+                this.$.photoList.selected -= 1;
+            },
+            savePhotoOrder: function(){
+                var photos = this.getItemList();
+                var dataList = [];
+                var ajax = document.createElement('core-ajax');
+                for(var i = 0; i < photos.length; i++){
+                    var data = {};
+                    data.id = photos[i].photoId;
+                    data.index = getIndex(photos, photos[i]);
+                    dataList.push(data);
+                }
+                ajax.method = "PUT";
+                ajax.url = "/admin/item/" + this.itemId;
+                ajax.handleAs = "json";
+                ajax.contentType = "application/json";
+                ajax.body = JSON.stringify(dataList);
+                ajax.addEventListener('core-complete',function(){
+                    ajax.remove();
+                }); 
+                console.log(ajax.body);
+                ajax.go();
             }
         });
     </script>
