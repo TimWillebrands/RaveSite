@@ -1,0 +1,89 @@
+<link rel="import" href="/bower/polymer/polymer.html">
+<link rel="import" href="/bower/paper-ripple/paper-ripple.html">
+<link rel="import" href="/bower/paper-input/paper-input.html">
+<link rel="import" href="/bower/paper-button/paper-button.html">
+
+<polymer-element name="rave-photo" attributes="photoId saveButton toolbar">
+    <template>
+        <style type="text/css">
+            #content{
+                width: calc(100% - 4em);
+                margin: 1em;
+                padding: 1em;
+                background: #7584AA;
+            }
+            #content.selected{
+                font-weight: bold;
+                background: #A9B3CD;
+            }
+            paper-ripple{
+                color: #fff;
+            }
+            paper-input{
+                width: calc(100% - 10em);
+            }
+            .key{
+                position: relative;
+                top: .5em;
+                display: block;
+                width: 10em;
+                float: left;
+            }
+        </style>
+        <div id="content" horizontal layout>
+            <img src = "{{thumbnail}}" height="100" alt="thumbnail" style="margin-right: 1em;">
+            <div id="fields" style="padding:1em;" flex>
+                <span class="key">Name: </span> <paper-input on-input="{{inputChanged}}" label="{{naime}}"></paper-input></br>
+                <span class="key">Description: </span> <paper-input on-input="{{inputChanged}}" multiline label="{{description}}"></paper-input></br>
+                <span class="key">Thumbnail: </span> <paper-input on-input="{{inputChanged}}" label="{{thumbnail}}"></paper-input></br>
+                <span class="key">Url: </span> <paper-input on-input="{{inputChanged}}" label="{{url}}"></paper-input></br>
+                <paper-shadow z="1"></paper-shadow>
+            </div>
+            <paper-shadow z="1"></paper-shadow>
+        </div>
+    </template>
+    <script>
+        /*global Polymer*/
+        Polymer('rave-photo', {
+            thumbnail: "",
+            naime: "",
+            description: "",
+            updateItem:function(){ //Set or update photo with ajax
+                var ajax = document.createElement('core-ajax');
+                var t = this;
+                ajax.method = "GET";
+                ajax.url = "/admin/photo/" + this.photoId;
+                ajax.addEventListener('core-complete',function(){
+                    var photo = JSON.parse(ajax.response);
+                    if(photo){
+                        t.naime = photo.name;
+                        t.description = photo.description;
+                        t.thumbnail = photo.thumbnail;
+                        t.url = photo.url;
+                    }else{
+                        t.remove();
+                        return;
+                    }
+                    ajax.remove();
+                }); 
+                ajax.go();
+            },
+            photoIdChanged:function(){
+                this.updateItem();
+            },
+            toggleSelection: function(state){ //Toggle visual selection, should only be used by parent element and not manualy
+                if(state){ 
+                    this.$.content.setAttribute("class", "selected");
+                    /*if(this.toolbar.previousItem)
+                        this.toolbar.previousItem.unSelectPhoto();*/
+                    this.toolbar.selectedPhoto = this;
+                }else{
+                    this.$.content.removeAttribute("class");
+                }
+            },
+            inputChanged: function(state){ // Allow changes to be saved by making the parent its save button usable
+                this.saveButton.disabled = false;
+            }
+        });
+    </script>
+</polymer-element>
