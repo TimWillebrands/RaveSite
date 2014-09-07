@@ -16,16 +16,16 @@ module.exports.controller = function(app) {
 
     mainRoutes.get(['/','/home'], function(req, res) {
         res.render('foundation', { 
+            title: 'Ravé',
             body: ejs.render(getFile('index'), {
-                title: 'Home',
             }),
         });
     });
     
     mainRoutes.get('/werk', function(req, res) {
         res.render('foundation', { 
+            title: 'Werk',
             body: ejs.render(getFile('index'), {
-                title: 'Werk',
             }),
         });
     });
