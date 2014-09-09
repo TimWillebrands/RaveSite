@@ -30,6 +30,16 @@ module.exports.controller = function(app) {
         });
     });
     
+    mainRoutes.get('/test', function(req, res) {
+        res.render('test', {
+            title: 'This is a test',
+        });
+    });
+    
+    mainRoutes.get('/img.jpg', function(req, res) {
+        res.redirect("http://www.alchimiegrafiche.com/wp-content/uploads/2012/03/b432image520.png");
+    });
+    
     mainRoutes.use(lessMiddleware(path.join(__dirname + "/../less"),{
     	dest: path.join(__dirname + "/../"),
     	preprocess: {
