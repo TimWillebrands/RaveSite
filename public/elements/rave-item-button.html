@@ -4,7 +4,7 @@
 <polymer-element name="rave-item-button" attributes="itemId">
     <template>
         <style type="text/css">
-            @import url(http://fonts.googleapis.com/css?family=Open+Sans);
+            @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700);
             :host{
                 float:left;
                 position: relative;
@@ -19,7 +19,7 @@
                 height: 100%;
             }
             a #content{
-                font-family: 'Lobster', sans-serif;
+                font-family: 'Open Sans', sans-serif;
                 position: absolute;
                 box-sizing: border-box;
                 border: rgb(126, 122, 122) 4px solid;
@@ -28,6 +28,10 @@
                 width: 100%;
                 height: 100%;
                 z-index: 100;
+            }
+            a #content h1{
+                font-weight: 700;
+                
             }
             a #cover{
                 position: absolute;
