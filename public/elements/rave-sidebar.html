@@ -1,0 +1,46 @@
+<link rel="import" href="/bower/polymer/polymer.html">
+<link rel="import" href="/bower/core-menu/core-menu.html">
+<link rel="import" href="/bower/core-item/core-item.html">
+<link rel="import" href="/bower/core-icons/core-icons.html">
+
+<polymer-element name="rave-sidebar" attributes="selected">
+    <template vertical layout>
+        <style>
+            @import url(https://fonts.googleapis.com/css?family=Dosis:600);
+            
+            :host{
+                background-color: rgb(50,50,55);
+                background-color: rgba(50,50,55,0.5);
+                border-right: 3px solid rgb(96, 136, 208);
+                border-right: 3px solid rgba(96, 136, 208,0.5);
+                font: 1.4em 'Dosis', Arial,sans-serif;
+            }
+            #logo{
+                margin: 1em;
+                text-align: center;
+                font: 2em 'Dosis', Arial,sans-serif;
+                font-weight: 600;
+            }
+            .core-selected{
+                font: 1.4em 'Dosis', Arial,sans-serif;
+                border-bottom: 3px solid rgb(96, 136, 208);;
+            }
+        </style>
+        <div id="logo">
+            Ravé
+        </div>
+        <core-menu selected="{{selected}}" valueattr="tag">
+            <core-item label="Ravé" tag="rave" icon="Settings"></core-item>
+            <core-item label="Werk" tag="werk" icon="Dialog"></core-item>
+            <core-item label="Contact" tag="contact" icon="Search"></core-item>
+        </core-menu>
+    </template>
+    <script>
+        /*global Polymer*/
+        Polymer('rave-sidebar', {
+            ready: function() {
+                this.selected="rave";
+            }
+        });
+    </script>
+</polymer-element>

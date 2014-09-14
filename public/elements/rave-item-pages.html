@@ -1,0 +1,28 @@
+<link rel="import" href="/bower/polymer/polymer.html">
+<link rel="import" href="/bower/core-selector/core-selector.html">
+<link rel="import" href="/bower/core-ajax/core-ajax.html">
+<link rel="import" href="/public/elements/rave-item-page.html">
+
+<polymer-element name="rave-item-pages" attributes="tag">
+    <template>
+        <style>
+            :host{
+                overflow: hidden;
+            }
+            core-selector{
+                position: fixed;
+                overflow: hidden;
+            }
+        </style>
+        <core-selector id="items" on-core-select="{{select}}" notap fit>
+            <content></content>
+        </core-selector>
+    </template>
+    <script>
+        /*global Polymer*/
+        Polymer('rave-item-pages', {
+            ready: function() {
+            }
+        });
+    </script>
+</polymer-element>
