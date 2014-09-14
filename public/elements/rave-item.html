@@ -44,6 +44,7 @@
             <span class="key">Name: </span> <paper-input id="name" on-input="{{inputChanged}}" label="{{naime}}"></paper-input></br>
             <span class="key">Description: </span> <paper-input id="description" on-input="{{inputChanged}}" multiline label="{{description}}"></paper-input></br>
             <span class="key">Thumbnail: </span> <paper-input id="thumbnail" on-input="{{inputChanged}}" label="{{thumbnail}}"></paper-input></br>
+            <span class="key">Tags: </span> <paper-input id="tags" on-input="{{inputChanged}}" label="{{tags}}"></paper-input></br>
             <core-selector id="photoList" style="padding: 1em;" on-core-select="{{ selectPhoto }}"></core-selector>
             <paper-shadow z="1"></paper-shadow>
             <paper-button id="save" class="my-button" raisedButton="true" label="Save" icon="done" on-click="{{saveItem}}" disabled></paper-button>
@@ -63,6 +64,7 @@
             naime: "",
             description: "",
             thumbnail: "",
+            tags: "",
             changedPhotos: {},
             updateItem:function(){
                 var ajax = document.createElement('core-ajax');
@@ -75,6 +77,7 @@
                     t.naime = item.name;
                     t.description = item.description;
                     t.thumbnail = item.thumbnail;
+                    t.tags = item.tags;
                     item.photos.forEach(function(photoId){
                         var newPhoto  = document.createElement('rave-photo');
                         newPhoto.photoId = photoId;
@@ -116,6 +119,8 @@
                     itemProps.description = this.$.description.inputValue;
                 if(this.$.thumbnail.inputValue)
                     itemProps.thumbnail = this.$.thumbnail.inputValue;
+                if(this.$.tags.inputValue)
+                    itemProps.tags = this.$.tags.inputValue;
                 
                 var ajax = document.createElement('core-ajax');
                 var overlay = document.body.overlay;
@@ -131,6 +136,7 @@
                     t.$.name.inputValue = "";
                     t.$.description.inputValue = "";
                     t.$.thumbnail.inputValue = "";
+                    t.$.tags.inputValue = "";
                     ajax.remove();
                     setTimeout(function(){
                         overlay.style.display = "none";

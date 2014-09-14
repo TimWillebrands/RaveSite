@@ -76,8 +76,7 @@
                 ajax.body = JSON.stringify(dataList);
                 ajax.addEventListener('core-complete',function(){
                     ajax.remove();
-                }); 
-                console.log(ajax.body);
+                });
                 ajax.go();
             }
         });

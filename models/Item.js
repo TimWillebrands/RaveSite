@@ -1,12 +1,12 @@
 var mongoose    = require('mongoose');
 
 var itemSchema = mongoose.Schema({
-    
     name:           String,
     description:    String,
     thumbnail:      String,
     index:          Number,
-    photos:         [String]
+    photos:         [String],
+    tags:         [String],
 });
 
 itemSchema.methods.addPhoto = function (photo) {

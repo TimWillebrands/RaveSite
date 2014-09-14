@@ -9,7 +9,7 @@ var Item   = require('../models/Item');
 var Busboy      = require('busboy');
 
 module.exports.controller = function(app) {
-    var authRoutes          = express.Router();
+    var authRoutes = express.Router();
     
     function getFile(fileName){
         return fs.readFileSync(__dirname + '/../views/' + fileName + '.ejs', 'utf8');
@@ -106,7 +106,7 @@ module.exports.controller = function(app) {
 		    item.index = index;
             item.save(function (err) {
                 if (err) return console.error(err);
-                if(sort){
+                if (typeof sort == 'function') { 
                     sort(itemId,photoIds);
                 }
             });
@@ -187,6 +187,7 @@ module.exports.controller = function(app) {
 		    Photo.findById(photoId,function(err, photo){
 		        for(var propt in data){
 		            photo[propt] = data[propt];
+		            console.log(propt);
 		        }
 		        photo.save(function(err){
 		            if(err) console.error(err);

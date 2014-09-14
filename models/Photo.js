@@ -9,6 +9,7 @@ var photoSchema = Schema({
     url:            String,
     index:          Number,
     item:           String,
+    focus:           String,
 });
 
 module.exports = mongoose.model('photo', photoSchema);

@@ -37,6 +37,7 @@
                 <span class="key">Description: </span> <paper-input id="description" on-input="{{inputChanged}}" multiline label="{{description}}"></paper-input></br>
                 <span class="key">Thumbnail: </span> <paper-input id="thumbnail" on-input="{{inputChanged}}" label="{{thumbnail}}"></paper-input></br>
                 <span class="key">Url: </span> <paper-input id="url" on-input="{{inputChanged}}" label="{{url}}"></paper-input></br>
+                <span class="key">Focus: </span> <paper-input id="focus" on-input="{{inputChanged}}" label="{{focus}}"></paper-input></br>
                 <paper-shadow z="1"></paper-shadow>
             </div>
             <paper-shadow z="1"></paper-shadow>
@@ -48,6 +49,7 @@
             thumbnail: "",
             naime: "",
             description: "",
+            focus: "",
             updateItem:function(){ //Set or update photo with ajax
                 var ajax = document.createElement('core-ajax');
                 var t = this;
@@ -60,6 +62,7 @@
                         t.description = photo.description;
                         t.thumbnail = photo.thumbnail;
                         t.url = photo.url;
+                        t.focus = photo.focus;
                     }else{
                         t.remove();
                         return;
@@ -84,16 +87,19 @@
             inputChanged: function(state){ // Allow changes to be saved by making the parent its save button usable
                 this.parentItem.setButton(false);
                 
-                var itemProps = {};
+                var photoProps = {};
                 if(this.$.name.inputValue)
-                    itemProps.name = this.$.name.inputValue;
+                    photoProps.name = this.$.name.inputValue;
                 if(this.$.description.inputValue)
-                    itemProps.description = this.$.description.inputValue;
+                    photoProps.description = this.$.description.inputValue;
                 if(this.$.thumbnail.inputValue)
-                    itemProps.thumbnail = this.$.thumbnail.inputValue;
+                    photoProps.thumbnail = this.$.thumbnail.inputValue;
                 if(this.$.url.inputValue)
-                    itemProps.url = this.$.url.inputValue;
-                this.parentItem.changedPhotos[this.photoId] = itemProps;
+                    photoProps.url = this.$.url.inputValue;
+                if(this.$.focus.inputValue)
+                    photoProps.focus = this.$.focus.inputValue;
+                    console.log(photoProps);
+                this.parentItem.changedPhotos[this.photoId] = photoProps;
                 this.parentItem.asdsd += 1;
             }
         });
