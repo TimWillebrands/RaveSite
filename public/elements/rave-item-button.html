@@ -3,9 +3,8 @@
 
 <polymer-element name="rave-item-button" attributes="itemId">
     <template>
-        <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet prefetch' type='text/css'>
         <style type="text/css">
-            
+            @import url(http://fonts.googleapis.com/css?family=Open+Sans);
             :host{
                 float:left;
                 position: relative;
@@ -69,7 +68,7 @@
         </style>
         <a id="link" href="#">
             <div id="content">
-                <h2>{{title}}</h2>
+                <h1>{{title}}</h1>
                 {{description}}    
             </div>
             <div id="cover"></div>
