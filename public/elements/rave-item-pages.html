@@ -8,10 +8,7 @@
         <style>
             :host{
                 overflow: hidden;
-            }
-            core-selector{
-                position: fixed;
-                overflow: hidden;
+                overflow-y: auto;
             }
         </style>
         <core-selector id="items" on-core-select="{{select}}" notap fit>
@@ -19,9 +16,14 @@
         </core-selector>
     </template>
     <script>
-        /*global Polymer*/
+        /*global Polymer tinyscrollbar*/
         Polymer('rave-item-pages', {
-            ready: function() {
+            domReady: function() {
+                
+            },
+            setScrollbar: function(){
+                console.log("asdad");
+                tinyscrollbar(this.$.items);
             }
         });
     </script>

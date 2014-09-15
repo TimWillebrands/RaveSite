@@ -4,7 +4,7 @@
 <polymer-element name="rave-item-button" attributes="itemId">
     <template>
         <style type="text/css">
-            @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700);
+            @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
             :host{
                 float:left;
                 position: relative;
@@ -38,9 +38,9 @@
                 width: 100%;
                 height: 100%;
                 z-index: 255;
-                background: url(http://www.mytreedb.com/uploads/mytreedb/loader/ajax_loader_gray_350.gif);
+                background: "#7e7a7a";
+                background-image: url(/public/images/loader.gif);
                 background-position: 50% 50%;
-                background-size: cover;
                 background-repeat: no-repeat;
                 -moz-transition: margin-top 1s;
                 -o-transition: margin-top 1s;
@@ -98,6 +98,7 @@
                     var item = ajax.response;
                     cover.style.backgroundImage = "url("+item.thumbnail+")";
                     cover.style.backgroundPosition= "100% 100%";
+                    cover.style.backgroundSize= "cover";
                     t.title = item.name;
                     t.description = item.description;
                     ajax.remove();
