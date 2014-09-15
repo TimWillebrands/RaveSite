@@ -42,7 +42,7 @@ module.exports.controller = function(app) {
     .post(function(req, res) {
 		var tags = req.body;
         for(var i=0; i<tags.length; i++) {
-            console.log(tags[i]);
+            console.log("Item tags:",tags[i]);
         }
 		Item.find().sort('index').exec(function(err, items) {
 			if (err) return res.send(err);
