@@ -1,7 +1,7 @@
 <link rel="import" href="/bower/polymer/polymer.html">
 <link rel="import" href="/bower/core-ajax/core-ajax.html">
 
-<polymer-element name="rave-item-button" attributes="itemId">
+<polymer-element name="rave-item-button" attributes="itemId baseUrl" unresolved>
     <template>
         <style type="text/css">
             @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
@@ -31,7 +31,6 @@
             }
             a #content h1{
                 font-weight: 700;
-                
             }
             a #cover{
                 position: absolute;
@@ -47,18 +46,21 @@
                 -webkit-transition: margin-top 1s;
                 transition: margin-top 1s;
                 transition-delay: .28s;
+                -webkit-filter: grayscale(100%);
+                -moz-filter: grayscale(100%);
+                filter: grayscale(100%);
             }
             a:hover #cover{
                 margin-top: 80%;
             }
             
-            @media all and (min-width: 1000px) and (max-width: 1700px) {
+            @media all and (min-width: 1441px) and (max-width: 1920px) {
                 :host{
                     width: 33.33333333%;
                     padding-bottom : 30%; /* = width for a 1:1 aspect ratio */
                 }
             }
-            @media all and (min-width: 630px) and (max-width: 999px) {
+            @media all and (min-width: 630px) and (max-width: 1440px) {
                 :host{
                     width: 50%;
                     padding-bottom : 45%;
@@ -71,7 +73,7 @@
                 }
             }
         </style>
-        <a id="link" href="#">
+        <a id="link" on-tap="{{click}}" href="#">
             <div id="content">
                 <h1>{{title}}</h1>
                 {{description}}    
@@ -80,7 +82,7 @@
         </a>
     </template>
     <script>
-        /*global Polymer*/
+        /*global Polymer History*/
         Polymer('rave-item-button', {
             title: "Title",
             description: "Description",
@@ -88,7 +90,7 @@
                 var link = this.$.link;
                 var cover = this.$.cover;
                 var t = this;
-                link.setAttribute('href','#'+newValue);
+                link.setAttribute('href','#');
                 var ajax = document.createElement('core-ajax');
                 ajax.method = "GET";
                 ajax.url = "/admin/item/" + newValue;
@@ -97,7 +99,7 @@
                 ajax.addEventListener('core-complete',function(){
                     var item = ajax.response;
                     cover.style.backgroundImage = "url("+item.thumbnail+")";
-                    cover.style.backgroundPosition= "100% 100%";
+                    cover.style.backgroundPosition = "100% 100%"; //BAAAAADDDDD!!!!
                     cover.style.backgroundSize= "cover";
                     t.title = item.name;
                     t.description = item.description;
@@ -105,8 +107,11 @@
                 }); 
                 ajax.go();
             },
-            hover: function(){
-                console.log("ASD");
+            click: function(){
+                var newUrl = "/" + this.baseUrl + "/" + this.itemId;
+                History.pushState(null, this.title, newUrl);
+                
+                //TODO: Actualy show item...
             }
         });
     </script>

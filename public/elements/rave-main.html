@@ -1,60 +1,40 @@
 <link rel="import" href="/bower/polymer/polymer.html">
+<link rel="import" href="/bower/core-pages/core-pages.html">
+<link rel="import" href="/bower/core-item/core-item.html">
+<link rel="import" href="/bower/core-icons/core-icons.html">
 <link rel="import" href="/public/elements/rave-sidebar.html">
 <link rel="import" href="/public/elements/rave-item-pages.html">
-<link rel="import" href="/bower/core-pages/core-pages.html">
 <link rel="import" href="/public/elements/rave-item-button.html">
 
 <polymer-element name="rave-main" attributes="selected" fit horizontal layout>
     <template>
         <style type="text/css">
-            rave-sidebar{
-                width: 10em;
-                margin: 3em;
-                margin-left: 2em;
+            #sideBar{
+                width: 15em;
+                /*margin: 3em;
+                margin-left: 2em;*/
             }
         </style>
-        <rave-sidebar selected="{{selected}}"></rave-sidebar>
-        <core-pages flex selected="{{selected}}" valueattr="tag">
-            <rave-item-pages id="rave" tag="rave"></rave-item-pages>
-            <rave-item-pages tag="werk"></rave-item-pages>
-            <rave-item-pages tag="contact"></rave-item-pages>
+        <rave-sidebar id="sideBar" selected="{{selected}}">
+            <core-item label="Over mij" tag="home" icon="Settings"></core-item>
+            <core-item label="Portfolio" tag="portfolio" icon="Dialog"></core-item>
+            <core-item label="Contact" tag="contact" icon="Search"></core-item>
+        </rave-sidebar>
+        <core-pages flex selected="{{selected}}" valueattr="id">
+            <rave-item-pages id="home"></rave-item-pages>
+            <rave-item-pages id="portfolio"></rave-item-pages>
+            <rave-item-pages id="contact"></rave-item-pages>
         </core-pages>
     </template>
     <script>
         /*global Polymer*/
         Polymer('rave-main', {
-            selectedChanged: function(o,n){
-            },
+            selected: "home",
             ready: function() {
-                var hash = window.location.href.indexOf("#");
-                if(hash != -1){
-                    console.log("true");
-                }else{
-                    var tags = [];
-                    var itemsHolder  = this.$[this.selected];
-                    tags.push(this.selected);
-                    var ajax = document.createElement('core-ajax');
-                    ajax.method = "POST";
-                    ajax.url = "/item";
-                    ajax.body = JSON.stringify(tags);
-                    ajax.handleAs = "json";
-                    ajax.contentType = "application/json";
-                    ajax.addEventListener('core-complete',function(){
-                        var items = ajax.response;
-                        items.forEach(function(element,index){
-                            var itemPage = document.createElement('rave-item-button');
-                            itemPage.itemId = element;
-                            itemsHolder.appendChild(itemPage);
-                            //itemsHolder.setScrollbar();
-                        });
-                        
-                        ajax.remove();
-                    }); 
-                    ajax.go();
-                }
+                this.$.sideBar.selected = this.selected;
             },
-            hashChange: function(){
-                console.log
+            selectedChanged: function(oldValue, newValue){
+                console.log(newValue, this.$.sideBar.selected);
             }
         });
     </script>

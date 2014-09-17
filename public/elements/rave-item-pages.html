@@ -3,10 +3,11 @@
 <link rel="import" href="/bower/core-ajax/core-ajax.html">
 <link rel="import" href="/public/elements/rave-item-page.html">
 
-<polymer-element name="rave-item-pages" attributes="tag">
+<polymer-element name="rave-item-pages" attributes="tag shownItem">
     <template>
         <style>
             :host{
+                margin: 1em;
                 overflow: hidden;
                 overflow-y: auto;
             }
@@ -16,14 +17,48 @@
         </core-selector>
     </template>
     <script>
-        /*global Polymer tinyscrollbar*/
-        Polymer('rave-item-pages', {
-            domReady: function() {
+        /*global Polymer History*/
+        
+        var makeActive = function(element){
+            element.setAttribute('unresolved','');
+            var tag = element.id;
+            History.pushState(null, tag, tag);
+            
+            element.innerHTML = "";
+            
+            var tags = [];
+            var itemsHolder  = element;
+            tags.push(tag);
+            var ajax = document.createElement('core-ajax');
+            ajax.method = "POST";
+            ajax.url = "/ajax/item";
+            ajax.body = JSON.stringify(tags);
+            ajax.handleAs = "json";
+            ajax.contentType = "application/json";
+            ajax.addEventListener('core-complete',function(){
+                var items = ajax.response;
+                items.forEach(function(itemId,index){
+                    var itemButton = document.createElement('rave-item-button');
+                    itemButton.itemId = itemId;
+                    itemButton.baseUrl = tag;
+                    itemsHolder.appendChild(itemButton);
+                    itemButton.addEventListener('load',function(){
+                        console    
+                    });
+                });
                 
-            },
-            setScrollbar: function(){
-                console.log("asdad");
-                tinyscrollbar(this.$.items);
+                ajax.remove();
+            }); 
+            ajax.go();
+        };
+        
+        Polymer('rave-item-pages', {
+            attributeChanged: function(attr, oldVal, newVal){
+                if(attr==="active" && newVal===""){
+                    makeActive(this);
+                }else if(attr==="active"){
+                    
+                }
             }
         });
     </script>
