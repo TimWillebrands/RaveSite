@@ -41,6 +41,13 @@ module.exports.controller = function(app) {
         });
     });
     
+    mainRoutes.get('/portfolio/:item_id', function(req, res) {
+        res.render('test', {
+            title: 'Ravé - Contact',
+            page: 'contact'
+        });
+    });
+    
     mainRoutes.use(lessMiddleware(path.join(__dirname + "/../less"),{
     	dest: path.join(__dirname + "/../"),
     	preprocess: {

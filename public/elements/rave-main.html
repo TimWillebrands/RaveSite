@@ -9,7 +9,7 @@
 <link rel="import" href="/public/elements/rave-item-pages.html">
 <link rel="import" href="/public/elements/rave-item-button.html">
 
-<polymer-element name="rave-main" attributes="selected" fit horizontal layout>
+<polymer-element name="rave-main" attributes="selected itemId" fit horizontal layout>
     <template>
         <style type="text/css">
             #sideBar{
@@ -29,33 +29,36 @@
                 <rave-item-pages id="portfolio"></rave-item-pages>
                 <rave-item-pages id="contact"></rave-item-pages>
             </core-pages>
-            <rave-item-page flex></rave-item-page>
+            <rave-item-page id="itemPage" flex></rave-item-page>
         </core-animated-pages>
     </template>
     <script>
+        var max = 1;
+        
         /*global Polymer*/
         Polymer('rave-main', {
             selected: "home",
+            itemId: null,
             ready: function() {
                 this.$.sideBar.selected = this.selected;
+                if(this.itemId)
+                    console.log("YAY");
             },
             selectedChanged: function(oldValue, newValue){
                 console.log(newValue, this.$.sideBar.selected);
             },
-            selectContentType: function(itemId){
-                console.log(itemId);
+            selectItem: function(itemId){
+                this.$.itemPage.itemId = itemId;
                 var p = this.$.itemOrMainPage;
-                var up = true;
-                var max = 1;
                 
-                if (up && p.selected === max || !up && p.selected === 0) {
-                    up = !up;
-                }
-                if (up) {
-                    p.selected += 1;
-                } else {
-                    p.selected -= 1;
-                }
+                if (p.selected === 0)
+                    p.selected = 1;
+            },
+            returnFromItem: function(){
+                var p = this.$.itemOrMainPage;
+                
+                if (p.selected === max)
+                    p.selected = 0;
             }
         });
     </script>
