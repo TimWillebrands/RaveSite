@@ -22,7 +22,7 @@
         var makeActive = function(element){
             element.setAttribute('unresolved','');
             var tag = element.id;
-            History.pushState(null, tag, tag);
+            History.pushState(null, tag, "/"+tag);
             
             element.innerHTML = "";
             
@@ -42,9 +42,6 @@
                     itemButton.itemId = itemId;
                     itemButton.baseUrl = tag;
                     itemsHolder.appendChild(itemButton);
-                    itemButton.addEventListener('load',function(){
-                        console    
-                    });
                 });
                 
                 ajax.remove();

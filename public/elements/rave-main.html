@@ -1,8 +1,11 @@
 <link rel="import" href="/bower/polymer/polymer.html">
+<link rel="import" href="/bower/core-animated-pages/core-animated-pages.html">
+<link rel="import" href="/bower/core-animated-pages/transitions/slide-from-bottom.html">
 <link rel="import" href="/bower/core-pages/core-pages.html">
 <link rel="import" href="/bower/core-item/core-item.html">
 <link rel="import" href="/bower/core-icons/core-icons.html">
 <link rel="import" href="/public/elements/rave-sidebar.html">
+<link rel="import" href="/public/elements/rave-item-page.html">
 <link rel="import" href="/public/elements/rave-item-pages.html">
 <link rel="import" href="/public/elements/rave-item-button.html">
 
@@ -20,11 +23,14 @@
             <core-item label="Portfolio" tag="portfolio" icon="Dialog"></core-item>
             <core-item label="Contact" tag="contact" icon="Search"></core-item>
         </rave-sidebar>
-        <core-pages flex selected="{{selected}}" valueattr="id">
-            <rave-item-pages id="home"></rave-item-pages>
-            <rave-item-pages id="portfolio"></rave-item-pages>
-            <rave-item-pages id="contact"></rave-item-pages>
-        </core-pages>
+        <core-animated-pages id="itemOrMainPage" transitions="slide-from-bottom" flex horizontal layout>
+            <core-pages selected="{{selected}}" valueattr="id" flex>
+                <rave-item-pages id="home"></rave-item-pages>
+                <rave-item-pages id="portfolio"></rave-item-pages>
+                <rave-item-pages id="contact"></rave-item-pages>
+            </core-pages>
+            <rave-item-page flex></rave-item-page>
+        </core-animated-pages>
     </template>
     <script>
         /*global Polymer*/
@@ -35,6 +41,21 @@
             },
             selectedChanged: function(oldValue, newValue){
                 console.log(newValue, this.$.sideBar.selected);
+            },
+            selectContentType: function(itemId){
+                console.log(itemId);
+                var p = this.$.itemOrMainPage;
+                var up = true;
+                var max = 1;
+                
+                if (up && p.selected === max || !up && p.selected === 0) {
+                    up = !up;
+                }
+                if (up) {
+                    p.selected += 1;
+                } else {
+                    p.selected -= 1;
+                }
             }
         });
     </script>

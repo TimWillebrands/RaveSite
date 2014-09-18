@@ -3,72 +3,15 @@
 
 <polymer-element name="rave-item-page" attributes="itemId">
     <template>
-        <style type="text/css">
-            :host{
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                overflow: hidden;
-            }
-            .photo{
-                position: absolute;
-                background: url(https://www.adobe.com/business/calculator/VIP/image/loader.gif); 
-                background-position: 50% 50%;
-                background-repeat: no-repeat;
-                -webkit-background-size: cover;
-                -moz-background-size: cover;
-                -o-background-size: cover;
-                background-size: cover;
-                height: 100%;
-                width: 100%;
-            }
-        </style>
-        <div fit id="photoList"></div>
+        <button type="submit" on-tap="{{click}}">CLICK!</button>
     </template>
     <script>
-        /*global Polymer*/
+        /*global Polymer getMain*/
         Polymer('rave-item-page', {
-            domReady: function() {
-                var ajax = document.createElement('core-ajax');
-                var shadowNode = this.$.photoList.parentNode;
-                this.$.photoList.remove();
-                ajax.method = "GET";
-                ajax.url = "/item/"+this.itemId;
-                ajax.handleAs = "json";
-                ajax.contentType = "application/json";
-                ajax.addEventListener('core-complete',function(){
-                    var item = ajax.response;
-                    item.photos.forEach(function(element,index){
-                        createPhoto(element, index, shadowNode);
-                    });
-                    ajax.remove();
-                }); 
-                ajax.go();
+            click: function() {
+                getMain().selectContentType();
             }
         });
         
-        var createPhoto = function(photoId, index, list){
-            var ajax = document.createElement('core-ajax');
-            ajax.method = "GET";
-            ajax.url = "/photo/"+photoId;
-            ajax.handleAs = "json";
-            ajax.contentType = "application/json";
-            ajax.addEventListener('core-complete',function(){
-                var photo = ajax.response;
-                if(photo){
-                    var photoElement = document.createElement('div');
-                    photoElement.setAttribute('class','photo');
-                    //photoElement.setAttribute('fit','');
-                    photoElement.style.backgroundImage = "url("+ photo.url +")";
-                    photoElement.style.backgroundPosition = photo.focus;
-                    photoElement.style.left = (index*100) +"%";
-                    list.appendChild(photoElement);
-                }else{
-                    console.log(photoId);
-                }
-                ajax.remove();
-            }); 
-            ajax.go();
-        };
     </script>
 </polymer-element>

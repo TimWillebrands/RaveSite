@@ -38,7 +38,7 @@
                 height: 100%;
                 z-index: 255;
                 background: "#7e7a7a";
-                background-image: url(/public/images/loader.gif);
+                /*background-image: url(/public/images/loader.gif);*/
                 background-position: 50% 50%;
                 background-repeat: no-repeat;
                 -moz-transition: margin-top 1s;
@@ -72,23 +72,34 @@
                     padding-bottom : 90%;
                 }
             }
+            
+            #bowlG{position:relative;width:128px;height:128px;top:calc(50% - 75px);left:calc(50% - 75px)}#bowl_ringG{position:absolute;width:128px;height:128px;border:11px solid #303030;-moz-border-radius:128px;-webkit-border-radius:128px;-o-border-radius:128px;-ms-border-radius:128px;border-radius:128px}.ball_holderG{position:absolute;width:34px;height:128px;left:47px;top:0;-moz-animation-name:ball_moveG;-moz-animation-duration:1.2s;-moz-animation-iteration-count:infinite;-moz-animation-timing-function:linear;-webkit-animation-name:ball_moveG;-webkit-animation-duration:1.2s;-webkit-animation-iteration-count:infinite;-webkit-animation-timing-function:linear;-o-animation-name:ball_moveG;-o-animation-duration:1.2s;-o-animation-iteration-count:infinite;-o-animation-timing-function:linear;-ms-animation-name:ball_moveG;-ms-animation-duration:1.2s;-ms-animation-iteration-count:infinite;-ms-animation-timing-function:linear;animation-name:ball_moveG;animation-duration:1.2s;animation-iteration-count:infinite;animation-timing-function:linear}.ballG{position:absolute;left:0;top:-30px;width:51px;height:51px;background:#CCC;-moz-border-radius:43px;-webkit-border-radius:43px;-o-border-radius:43px;-ms-border-radius:43px;border-radius:43px}@-moz-keyframes ball_moveG{0%{-moz-transform:rotate(0deg)}100%{-moz-transform:rotate(360deg)}}@-webkit-keyframes ball_moveG{0%{-webkit-transform:rotate(0deg)}100%{-webkit-transform:rotate(360deg)}}@-o-keyframes ball_moveG{0%{-o-transform:rotate(0deg)}100%{-o-transform:rotate(360deg)}}@-ms-keyframes ball_moveG{0%{-ms-transform:rotate(0deg)}100%{-ms-transform:rotate(360deg)}}@keyframes ball_moveG{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
         </style>
         <a id="link" on-tap="{{click}}" href="#">
             <div id="content">
                 <h1>{{title}}</h1>
                 {{description}}    
             </div>
-            <div id="cover"></div>
+            <div id="cover">
+                <div id="bowlG">
+                    <div id="bowl_ringG">
+                        <div class="ball_holderG">
+                            <div class="ballG"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </a>
     </template>
     <script>
-        /*global Polymer History*/
+        /*global Polymer History getMain*/
         Polymer('rave-item-button', {
             title: "Title",
             description: "Description",
             itemIdChanged: function(oldValue, newValue){
                 var link = this.$.link;
                 var cover = this.$.cover;
+                var loader = this.$.bowlG;
                 var t = this;
                 link.setAttribute('href','#');
                 var ajax = document.createElement('core-ajax');
@@ -103,6 +114,7 @@
                     cover.style.backgroundSize= "cover";
                     t.title = item.name;
                     t.description = item.description;
+                    loader.remove();
                     ajax.remove();
                 }); 
                 ajax.go();
@@ -111,7 +123,7 @@
                 var newUrl = "/" + this.baseUrl + "/" + this.itemId;
                 History.pushState(null, this.title, newUrl);
                 
-                //TODO: Actualy show item...
+                getMain().selectContentType(this.itemId);
             }
         });
     </script>
