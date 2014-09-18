@@ -6,11 +6,15 @@
 <polymer-element name="rave-item-page" attributes="itemId">
     <template>
         <style>
-            img{
-                width: 0px;
-                height: 0px;
+            .photoContainer img{
+                width: 0;
+                height: 0;
+                z-index: -1;
             }
-            .photo{
+            .photoContainer .photo{
+                position: absolute;
+                width: 100%;
+                height: 100%;
                 background-size: cover;
             }
             #photoMenu{
@@ -64,14 +68,17 @@
             ajax.addEventListener('core-complete',function(){
                 var photo = ajax.response;
                 var img = document.createElement('img');
-                var div = document.createElement('div');
+                var photoDiv = document.createElement('div');
+                var container = document.createElement('div');
                 img.setAttribute('src',photo.url);
                 img.setAttribute('alt',photo.name);
-                div.style.backgroundImage = 'url('+photo.url+')';
-                div.style.backgroundPosition = photo.focus;
-                div.setAttribute('class','photo');
-                div.appendChild(img);
-                parent.appendChild(div);
+                photoDiv.style.backgroundImage = 'url('+photo.url+')';
+                photoDiv.style.backgroundPosition = photo.focus;
+                photoDiv.setAttribute('class','photo');
+                container.setAttribute('class','photoContainer');
+                container.appendChild(photoDiv);
+                container.appendChild(img);
+                parent.appendChild(container);
                 
                 ajax.remove();
             }); 

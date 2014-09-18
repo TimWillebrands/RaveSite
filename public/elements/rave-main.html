@@ -16,9 +16,12 @@
                 width: 15em;
                 z-index: 255;
             }
-            .content{
-                width: 100%;
-                height: 100%;        
+            section .content{
+                background: black;
+                background: rgba(0,0,0,0.4);
+                border-radius: 5px;
+                padding: 5em;
+                color: beige;
             }
         </style>
         <rave-sidebar id="sideBar" selected="{{selected}}">
@@ -28,9 +31,9 @@
         </rave-sidebar>
         <core-animated-pages id="itemOrMainPage" transitions="slide-from-bottom" flex horizontal layout>
             <core-pages selected="{{selected}}" valueattr="id" flex>
-                <div id="home" class="content"> HOI</div>
+                <section id="home" horizontal layout> <div style="width:10%"></div> <div class="content" flex>HOI</div> <div style="width:10%"></div> </section>
                 <rave-item-pages id="portfolio"></rave-item-pages>
-                <div id="contact" class="content">KOEL VERHAAL BROEDER</div>
+                <section id="contact" horizontal layout> <div style="width:10%"></div> <div class="content" flex>KOEL VERHAAL BROEDER</div> <div style="width:10%"></div> </section>
             </core-pages>
             <rave-item-page id="itemPage" flex></rave-item-page>
         </core-animated-pages>
