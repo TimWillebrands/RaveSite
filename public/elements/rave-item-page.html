@@ -9,10 +9,11 @@
             img{
                 width: 0px;
                 height: 0px;
-                padding: 50%;
-                background: aliceblue;
             }
-            #photMenu{
+            .photo{
+                background-size: cover;
+            }
+            #photoMenu{
                 position: absolute;
                 bottom: 2em;
                 left: 25%;
@@ -34,7 +35,7 @@
         </style>
         <core-animated-pages id="images" transitions="slide-from-right" fit></core-animated-pages>
         
-        <div id="photMenu" horizontal layout>
+        <div id="photoMenu" horizontal layout>
             <button id="previous" type="submit" on-tap="{{previous}}" disabled>PREVIOUS</button>
             <button id="next" type="submit" on-tap="{{next}}" disabled>NEXT</button>
             <div class="vr"></div>
@@ -63,12 +64,14 @@
             ajax.addEventListener('core-complete',function(){
                 var photo = ajax.response;
                 var img = document.createElement('img');
+                var div = document.createElement('div');
                 img.setAttribute('src',photo.url);
-                img.setAttribute('alt',photo.title);
-                img.style.backgroundImage = 'url('+photo.url+')';
-                img.style.backgroundSize = 'cover';
-                img.style.backgroundPosition = photo.focus;
-                parent.appendChild(img);
+                img.setAttribute('alt',photo.name);
+                div.style.backgroundImage = 'url('+photo.url+')';
+                div.style.backgroundPosition = photo.focus;
+                div.setAttribute('class','photo');
+                div.appendChild(img);
+                parent.appendChild(div);
                 
                 ajax.remove();
             }); 

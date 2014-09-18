@@ -41,12 +41,14 @@
         /*global Polymer History*/
         Polymer('rave-main', {
             selected: "home",
+            blockReturnFromItem: false,
             item: '',
             ready: function() {
-                this.$.sideBar.selected = this.selected;
-                
-                if(this.item !== '')
+                if(this.item !== ''){
+                    this.blockReturnFromItem = true;
                     this.selectItem(JSON.parse(this.item));
+                }
+                this.$.sideBar.selected = this.selected;
             },
             selectedChanged: function(oldValue, newValue){
                 this.returnFromItem();
@@ -62,11 +64,15 @@
                     p.selected = 1;
             },
             returnFromItem: function(){
-                History.pushState(null, this.selected, "/"+this.selected);
-                var p = this.$.itemOrMainPage;
-                
-                if (p.selected === max)
-                    p.selected = 0;
+                if(this.blockReturnFromItem !== true){
+                    History.pushState(null, this.selected, "/"+this.selected);
+                    var p = this.$.itemOrMainPage;
+                    
+                    if (p.selected === max)
+                        p.selected = 0;
+                }else{
+                    this.blockReturnFromItem = false;
+                }
             }
         });
     </script>
