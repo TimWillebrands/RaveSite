@@ -1,16 +1,133 @@
 <link rel="import" href="/bower/polymer/polymer.html">
 <link rel="import" href="/bower/core-selector/core-selector.html">
+<link rel="import" href="/bower/core-animated-pages/core-animated-pages.html">
+<link rel="import" href="/bower/core-animated-pages/transitions/slide-from-right.html">
 
 <polymer-element name="rave-item-page" attributes="itemId">
     <template>
-        <button type="submit" on-tap="{{click}}">CLICK!</button>
+        <style>
+            img{
+                height: 100%;
+                width: 100%;
+            }
+            #photMenu{
+                position: absolute;
+                bottom: 2em;
+                left: 25%;
+                width: 50%;
+                height: 10%;
+                max-height: 10em;
+                background: black;
+                background: rgba(0,0,0,0.8);
+                border-radius: 5px;
+            }
+            .vr{
+                border-left: 1px solid #2C2C2C;
+                border-right: 1px solid #5A5A5A;
+                margin: 0 .5em;
+                height:100%;
+                width: 0;
+            }
+            #bowlG{position:absolute;width:128px;height:128px;top:calc(50% - 75px);left:calc(50% - 75px)}#bowl_ringG{position:absolute;width:128px;height:128px;border:11px solid #303030;-moz-border-radius:128px;-webkit-border-radius:128px;-o-border-radius:128px;-ms-border-radius:128px;border-radius:128px}.ball_holderG{position:absolute;width:34px;height:128px;left:47px;top:0;-moz-animation-name:ball_moveG;-moz-animation-duration:1.2s;-moz-animation-iteration-count:infinite;-moz-animation-timing-function:linear;-webkit-animation-name:ball_moveG;-webkit-animation-duration:1.2s;-webkit-animation-iteration-count:infinite;-webkit-animation-timing-function:linear;-o-animation-name:ball_moveG;-o-animation-duration:1.2s;-o-animation-iteration-count:infinite;-o-animation-timing-function:linear;-ms-animation-name:ball_moveG;-ms-animation-duration:1.2s;-ms-animation-iteration-count:infinite;-ms-animation-timing-function:linear;animation-name:ball_moveG;animation-duration:1.2s;animation-iteration-count:infinite;animation-timing-function:linear}.ballG{position:absolute;left:0;top:-30px;width:51px;height:51px;background:#CCC;-moz-border-radius:43px;-webkit-border-radius:43px;-o-border-radius:43px;-ms-border-radius:43px;border-radius:43px}@-moz-keyframes ball_moveG{0%{-moz-transform:rotate(0deg)}100%{-moz-transform:rotate(360deg)}}@-webkit-keyframes ball_moveG{0%{-webkit-transform:rotate(0deg)}100%{-webkit-transform:rotate(360deg)}}@-o-keyframes ball_moveG{0%{-o-transform:rotate(0deg)}100%{-o-transform:rotate(360deg)}}@-ms-keyframes ball_moveG{0%{-ms-transform:rotate(0deg)}100%{-ms-transform:rotate(360deg)}}@keyframes ball_moveG{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+        </style>
+        <core-animated-pages id="images" transitions="slide-from-right" fit></core-animated-pages>
+        
+        <div id="photMenu" horizontal layout>
+            <button id="previous" type="submit" on-tap="{{previous}}" disabled>PREVIOUS</button>
+            <button id="next" type="submit" on-tap="{{next}}" disabled>NEXT</button>
+            <div class="vr"></div>
+            <div flex>
+                {{item.description}}
+            </div>
+            <div class="vr"></div>
+            <button type="submit" on-tap="{{back}}">BACK</button>
+        </div>
+
+        <div id="bowlG">
+            <div id="bowl_ringG">
+                <div class="ball_holderG">
+                    <div class="ballG"></div>
+                </div>
+            </div>
+        </div>
     </template>
     <script>
+        var createPhoto = function(photoId, parent){
+            var ajax = document.createElement('core-ajax');
+            ajax.method = "GET";
+            ajax.url = "/ajax/photo/"+photoId;
+            ajax.handleAs = "json";
+            ajax.contentType = "application/json";
+            ajax.addEventListener('core-complete',function(){
+                var photo = ajax.response;
+                var itemButton = document.createElement('img');
+                itemButton.setAttribute('src',photo.url);
+                itemButton.setAttribute('alt',photo.title);
+                parent.appendChild(itemButton);
+                
+                ajax.remove();
+            }); 
+            ajax.go();
+        };
+        
         /*global Polymer getMain*/
         Polymer('rave-item-page', {
-            click: function() {
+            item: null,
+            itemIdChanged: function(){
+                var images = this.$.images;
+                var loader = this.$.bowlG;
+                var t = this;
+                
+                loader.style.display = "block";
+                images.innerHTML = "";
+                images.selected = 0;
+                this.$.previous.setAttribute('disabled','');
+                this.$.next.setAttribute('disabled','');
+                
+                var ajax = document.createElement('core-ajax');
+                ajax.method = "GET";
+                ajax.url = "/ajax/item/"+this.itemId;
+                ajax.handleAs = "json";
+                ajax.contentType = "application/json";
+                ajax.addEventListener('core-complete',function(){
+                    t.item = ajax.response;
+                    if(t.item.photos.length > 1)
+                        t.$.next.removeAttribute('disabled');
+                        
+                    t.item.photos.forEach(function(photo){
+                        createPhoto(photo, images);
+                    });
+                    
+                    
+                    ajax.remove();
+                    loader.style.display = "none";
+                }); 
+                ajax.go();
+            },
+            back: function() {
                 getMain().returnFromItem();
+            },
+            next: function(){
+                var images = this.$.images;
+                images.selected += 1;
+                console.log(images.selected, images.items.length - 1);
+                if(images.selected>0)
+                    this.$.previous.removeAttribute('disabled');
+                
+                if(images.selected === (images.items.length-1))
+                    this.$.next.setAttribute('disabled','');
+            },
+            previous: function(){
+                var images = this.$.images;
+                images.selected -= 1;
+                
+                if(images.selected<(images.items.length-1))
+                    this.$.next.removeAttribute('disabled');
+                
+                if(images.selected === 0)
+                    this.$.previous.setAttribute('disabled','');
             }
+            
         });
         
     </script>

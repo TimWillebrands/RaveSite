@@ -20,7 +20,6 @@
                 overflow: hidden;
                 background-color: #1f1f1f;
                 background-image: url(/public/images/dark-brick-wall.png);
-                /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
             }
         </style>
         <script>
@@ -30,6 +29,6 @@
         </script>
     </head>
     <body fullbleed unresolved>
-        <rave-main id="main" selected= <%- page -%> ></rave-main>
+        <rave-main id="main" selected= <%- page -%> item= '<%- item -%>' ></rave-main>
     </body>
 </html>

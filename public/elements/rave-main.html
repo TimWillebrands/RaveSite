@@ -9,13 +9,16 @@
 <link rel="import" href="/public/elements/rave-item-pages.html">
 <link rel="import" href="/public/elements/rave-item-button.html">
 
-<polymer-element name="rave-main" attributes="selected itemId" fit horizontal layout>
+<polymer-element name="rave-main" attributes="selected item" fit horizontal layout>
     <template>
         <style type="text/css">
             #sideBar{
                 width: 15em;
-                /*margin: 3em;
-                margin-left: 2em;*/
+                z-index: 255;
+            }
+            .content{
+                width: 100%;
+                height: 100%;        
             }
         </style>
         <rave-sidebar id="sideBar" selected="{{selected}}">
@@ -25,9 +28,9 @@
         </rave-sidebar>
         <core-animated-pages id="itemOrMainPage" transitions="slide-from-bottom" flex horizontal layout>
             <core-pages selected="{{selected}}" valueattr="id" flex>
-                <rave-item-pages id="home"></rave-item-pages>
+                <div id="home" class="content"> HOI</div>
                 <rave-item-pages id="portfolio"></rave-item-pages>
-                <rave-item-pages id="contact"></rave-item-pages>
+                <div id="contact" class="content">KOEL VERHAAL BROEDER</div>
             </core-pages>
             <rave-item-page id="itemPage" flex></rave-item-page>
         </core-animated-pages>
@@ -35,26 +38,31 @@
     <script>
         var max = 1;
         
-        /*global Polymer*/
+        /*global Polymer History*/
         Polymer('rave-main', {
             selected: "home",
-            itemId: null,
+            item: '',
             ready: function() {
                 this.$.sideBar.selected = this.selected;
-                if(this.itemId)
-                    console.log("YAY");
+                
+                if(this.item !== '')
+                    this.selectItem(JSON.parse(this.item));
             },
             selectedChanged: function(oldValue, newValue){
-                console.log(newValue, this.$.sideBar.selected);
+                this.returnFromItem();
             },
-            selectItem: function(itemId){
-                this.$.itemPage.itemId = itemId;
+            selectItem: function(item){ //Single item page
+                var newUrl = "/" + this.selected + "/" + item._id;
+                History.pushState(null, item.title, newUrl);
+                
+                this.$.itemPage.itemId = item._id;
                 var p = this.$.itemOrMainPage;
                 
                 if (p.selected === 0)
                     p.selected = 1;
             },
             returnFromItem: function(){
+                History.pushState(null, this.selected, "/"+this.selected);
                 var p = this.$.itemOrMainPage;
                 
                 if (p.selected === max)

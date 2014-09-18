@@ -97,8 +97,9 @@
         </a>
     </template>
     <script>
-        /*global Polymer History getMain*/
+        /*global Polymer getMain*/
         Polymer('rave-item-button', {
+            item: null,
             title: "Title",
             description: "Description",
             itemIdChanged: function(oldValue, newValue){
@@ -114,6 +115,7 @@
                 ajax.contentType = "application/json";
                 ajax.addEventListener('core-complete',function(){
                     var item = ajax.response;
+                    t.item = item;
                     cover.style.backgroundImage = "url("+item.thumbnail+")";
                     cover.style.backgroundPosition = "100% 100%"; //BAAAAADDDDD!!!!
                     cover.style.backgroundSize= "cover";
@@ -125,10 +127,7 @@
                 ajax.go();
             },
             click: function(){
-                var newUrl = "/" + this.baseUrl + "/" + this.itemId;
-                History.pushState(null, this.title, newUrl);
-                
-                getMain().selectItem(this.itemId);
+                getMain().selectItem(this.item);
             }
         });
     </script>

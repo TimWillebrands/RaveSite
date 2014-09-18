@@ -17,12 +17,11 @@
         </core-selector>
     </template>
     <script>
-        /*global Polymer History*/
+        /*global Polymer*/
         
         var makeActive = function(element){
             element.setAttribute('unresolved','');
             var tag = element.id;
-            History.pushState(null, tag, "/"+tag);
             
             element.innerHTML = "";
             

@@ -22,30 +22,37 @@ module.exports.controller = function(app) {
 
     mainRoutes.get(['/','/home','/rave'], function(req, res) {
         res.render('test', {
-            title: 'Ravé - CAD/CAM voor Goudsmeden',
-            page: 'home'
+            title: 'Tim Willebrands',
+            page: 'home',
+            item: null
         });
     });
     
     mainRoutes.get('/portfolio', function(req, res) {
         res.render('test', {
-            title: 'Ravé - CAD/CAM voor Goudsmeden',
-            page: 'portfolio'
+            title: 'Portfolio',
+            page: 'portfolio',
+            item: null
         });
     });
     
     mainRoutes.get('/contact', function(req, res) {
         res.render('test', {
-            title: 'Ravé - Contact',
-            page: 'contact'
+            title: 'Contact',
+            page: 'contact',
+            item: null
         });
     });
     
     mainRoutes.get('/portfolio/:item_id', function(req, res) {
-        res.render('test', {
-            title: 'Ravé - Contact',
-            page: 'contact'
-        });
+		Item.findById(req.params.item_id, function(err, item) {
+			if (err) {res.send(err)}
+            res.render('test', {
+                title: 'Ravé - CAD/CAM voor Goudsmeden',
+                page: 'home',
+                item: JSON.stringify(item)
+            });
+		});
     });
     
     mainRoutes.use(lessMiddleware(path.join(__dirname + "/../less"),{
