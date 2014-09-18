@@ -49,7 +49,7 @@ module.exports.controller = function(app) {
 			if (err) {res.send(err)}
             res.render('test', {
                 title: 'Ravé - CAD/CAM voor Goudsmeden',
-                page: 'home',
+                page: 'portfolio',
                 item: JSON.stringify(item)
             });
 		});

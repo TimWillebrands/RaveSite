@@ -7,8 +7,10 @@
     <template>
         <style>
             img{
-                height: 100%;
-                width: 100%;
+                width: 0px;
+                height: 0px;
+                padding: 50%;
+                background: aliceblue;
             }
             #photMenu{
                 position: absolute;
@@ -60,10 +62,13 @@
             ajax.contentType = "application/json";
             ajax.addEventListener('core-complete',function(){
                 var photo = ajax.response;
-                var itemButton = document.createElement('img');
-                itemButton.setAttribute('src',photo.url);
-                itemButton.setAttribute('alt',photo.title);
-                parent.appendChild(itemButton);
+                var img = document.createElement('img');
+                img.setAttribute('src',photo.url);
+                img.setAttribute('alt',photo.title);
+                img.style.backgroundImage = 'url('+photo.url+')';
+                img.style.backgroundSize = 'cover';
+                img.style.backgroundPosition = photo.focus;
+                parent.appendChild(img);
                 
                 ajax.remove();
             }); 
