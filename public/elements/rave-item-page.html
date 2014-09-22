@@ -125,7 +125,6 @@
             next: function(){
                 var images = this.$.images;
                 images.selected += 1;
-                console.log(images.selected, images.items.length - 1);
                 if(images.selected>0)
                     this.$.previous.removeAttribute('disabled');
                 
