@@ -23,17 +23,12 @@
             }
         </style>
         <script>
-        
-            window.addEventListener('popstate', function(event) {
-                //var event = event.originalEvent;
-                console.log("state: " + event.state);
-            });
+            var History = window.history;
             
             function getMain(){
                 return document.querySelector("#main");
             }
             
-            var History = window.history;
         </script>
     </head>
     <body fullbleed unresolved>

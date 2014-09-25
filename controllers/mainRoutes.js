@@ -36,14 +36,6 @@ module.exports.controller = function(app) {
         });
     });
     
-    mainRoutes.get('/contact', function(req, res) {
-        res.render('test', {
-            title: 'Contact',
-            page: 'contact',
-            item: null
-        });
-    });
-    
     mainRoutes.get('/portfolio/:item_id', function(req, res) {
 		Item.findById(req.params.item_id, function(err, item) {
 			if (err) {res.send(err)}
@@ -53,6 +45,14 @@ module.exports.controller = function(app) {
                 item: JSON.stringify(item)
             });
 		});
+    });
+    
+    mainRoutes.get('/contact', function(req, res) {
+        res.render('test', {
+            title: 'Contact',
+            page: 'contact',
+            item: null
+        });
     });
     
     /*mainRoutes.use(lessMiddleware(path.join(__dirname + "/../less"),{

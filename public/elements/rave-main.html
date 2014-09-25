@@ -4,6 +4,7 @@
 <link rel="import" href="/bower/core-pages/core-pages.html">
 <link rel="import" href="/bower/core-item/core-item.html">
 <link rel="import" href="/bower/core-icons/core-icons.html">
+<link rel="import" href="/bower/core-icons/communication-icons.html">
 <link rel="import" href="/public/elements/rave-sidebar.html">
 <link rel="import" href="/public/elements/rave-item-page.html">
 <link rel="import" href="/public/elements/rave-item-pages.html">
@@ -24,9 +25,9 @@
             }
         </style>
         <rave-sidebar id="sideBar" selected="{{selected}}">
-            <core-item label="Over mij" tag="home" icon="Settings"></core-item>
-            <core-item label="Portfolio" tag="portfolio" icon="Dialog"></core-item>
-            <core-item label="Contact" tag="contact" icon="Search"></core-item>
+            <core-item label="Over mij" tag="home" icon="home"></core-item>
+            <core-item label="Portfolio" tag="portfolio" icon="visibility"></core-item>
+            <core-item label="Contact" tag="contact" icon="communication:contacts"></core-item>
         </rave-sidebar>
         <core-animated-pages id="itemOrMainPage" transitions="slide-from-bottom" flex horizontal layout>
             <core-pages selected="{{selected}}" valueattr="id" flex>
@@ -38,29 +39,47 @@
         </core-animated-pages>
     </template>
     <script>
-    
+        /*global Polymer History getMain*/
         var max = 1;
+    
+        window.addEventListener('popstate', function(event) {
+            if(event.state !== null){
+                if(event.state.type === "page"){
+                    getMain().returnFromItem();
+                }else if(event.state.type === "item"){
+                    var ajax = document.createElement('core-ajax');
+                    ajax.method = "GET";
+                    ajax.url = "/ajax/item/"+event.state.value;
+                    ajax.handleAs = "json";
+                    ajax.contentType = "application/json";
+                    ajax.addEventListener('core-complete',function(){
+                        getMain().selectItem(ajax.response);
+                        ajax.remove();
+                    }); 
+                    ajax.go();
+                }
+            }
+        });
         
-        /*global Polymer History*/
         Polymer('rave-main', {
             selected: "home",
             blockReturnFromItem: false,
             item: '',
             ready: function() {
+                
                 if(this.item !== ''){
                     this.blockReturnFromItem = true;
                     this.selectItem(JSON.parse(this.item));
                 }
                 this.$.sideBar.selected = this.selected;
+                
             },
             selectedChanged: function(oldValue, newValue){
                 this.returnFromItem();
             },
             selectItem: function(item){ //Single item page
                 var newUrl = "/" + this.selected + "/" + item._id;
-                var data = {type: "item", value: item._id};
-                History.pushState(data, item.title, newUrl); 
-                console.log(data);
+                History.pushState({type: "item", value: item._id}, item.title, newUrl);
                 
                 this.$.itemPage.itemId = item._id;
                 var p = this.$.itemOrMainPage;
@@ -70,7 +89,7 @@
             },
             returnFromItem: function(){
                 if(this.blockReturnFromItem !== true){
-                    History.pushState({type: "overview", value: this.selected}, this.selected, "/"+this.selected);
+                    History.pushState({type: "page", value: this.selected}, this.selected, "/"+this.selected);
                     var p = this.$.itemOrMainPage;
 
                     if (p.selected === max)

@@ -4,6 +4,7 @@
 <link rel="import" href="/bower/core-icons/core-icons.html">
 <link rel="import" href="/bower/core-toolbar/core-toolbar.html">
 <link rel="import" href="/bower/core-icon-button/core-icon-button.html">
+<link rel="import" href="/bower/core-animation/core-animation.html">
 <link rel="import" href="/public/fonts.html">
 
 <polymer-element name="rave-sidebar" attributes="selected">
@@ -20,17 +21,33 @@
         </core-menu>
     </template>
     <script>
+        /*global Polymer CoreAnimation*/
+        
         var bool = true;
-        /*global Polymer*/
+        var selfAnim = document.createElement("core-animation");
+        selfAnim.duration = 500;
+        selfAnim.keyframes = [
+          {width: "16em"},
+          {width: "3em"}
+        ];
+        selfAnim.fill = "both";
+        
+        selfAnim.addEventListener('core-animation-finish',function(){
+            console.log("AWSD");
+        });
+        
         Polymer('rave-sidebar', {
             scaffold: function(){
+                selfAnim.target = this;
                 if(bool){
-                    this.style.width = "3em";
+                    selfAnim.direction = "normal";
+                    selfAnim.play();
                     this.$.logo.style.display = "none";
                     this.$.menu.style.display = "none";
                     this.$.button.icon = "menu";
                 }else if(!bool){
-                    this.style.width = "360px";
+                    selfAnim.direction = "reverse";
+                    selfAnim.play();
                     this.$.logo.style.display = "block";
                     this.$.menu.style.display = "block";
                     this.$.button.icon = "reply";
