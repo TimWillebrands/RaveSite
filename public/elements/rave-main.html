@@ -44,8 +44,9 @@
     
         window.addEventListener('popstate', function(event) {
             if(event.state !== null){
+                var main = getMain();
                 if(event.state.type === "page"){
-                    getMain().returnFromItem();
+                    main.returnFromItem(true);
                 }else if(event.state.type === "item"){
                     var ajax = document.createElement('core-ajax');
                     ajax.method = "GET";
@@ -53,7 +54,7 @@
                     ajax.handleAs = "json";
                     ajax.contentType = "application/json";
                     ajax.addEventListener('core-complete',function(){
-                        getMain().selectItem(ajax.response);
+                        main.selectItem(ajax.response, true);
                         ajax.remove();
                     }); 
                     ajax.go();
@@ -77,19 +78,22 @@
             selectedChanged: function(oldValue, newValue){
                 this.returnFromItem();
             },
-            selectItem: function(item){ //Single item page
+            selectItem: function(item, noHistory){ //Single item page
                 var newUrl = "/" + this.selected + "/" + item._id;
-                History.pushState({type: "item", value: item._id}, item.title, newUrl);
-                
+                if(!noHistory)
+                    History.pushState({type: "item", value: item._id}, item.title, newUrl);
+                console.log("set state");
                 this.$.itemPage.itemId = item._id;
                 var p = this.$.itemOrMainPage;
                 
                 if (p.selected === 0)
                     p.selected = 1;
             },
-            returnFromItem: function(){
+            returnFromItem: function(noHistory){
                 if(this.blockReturnFromItem !== true){
-                    History.pushState({type: "page", value: this.selected}, this.selected, "/"+this.selected);
+                    if(!noHistory)
+                        History.pushState({type: "page", value: this.selected}, this.selected, "/"+this.selected);
+                    console.log("set state");
                     var p = this.$.itemOrMainPage;
 
                     if (p.selected === max)

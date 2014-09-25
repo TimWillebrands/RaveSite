@@ -5,7 +5,7 @@
 <polymer-element name="rave-item-button" attributes="itemId baseUrl" unresolved>
     <template>
         <link href="/public/css/rave-item-button.css" rel="stylesheet">
-        <a id="link" on-tap="{{click}}" href="#">
+        <div id="link" on-tap="{{click}}">
             <div id="content">
                 <h1>{{title}}</h1>
                 {{description}}    
@@ -19,7 +19,7 @@
                     </div>
                 </div>
             </div>
-        </a>
+        </div>
     </template>
     <script>
         /*global Polymer getMain*/
