@@ -11,7 +11,7 @@
         <title><%- title -%></title>
 
         <script src="/bower/platform/platform.js"></script>
-        <script src="/public/scripts/native.history.js"></script>
+        <!--<script src="/public/scripts/native.history.js"></script>-->
         <link rel="import" href="/public/elements/rave-main.html">
         <style>
             html,body {
@@ -23,9 +23,17 @@
             }
         </style>
         <script>
+        
+            window.addEventListener('popstate', function(event) {
+                //var event = event.originalEvent;
+                console.log("state: " + event.state);
+            });
+            
             function getMain(){
                 return document.querySelector("#main");
             }
+            
+            var History = window.history;
         </script>
     </head>
     <body fullbleed unresolved>

@@ -13,7 +13,6 @@
     <template>
         <style type="text/css">
             #sideBar{
-                width: 15em;
                 z-index: 255;
             }
             section .content{
@@ -59,8 +58,9 @@
             },
             selectItem: function(item){ //Single item page
                 var newUrl = "/" + this.selected + "/" + item._id;
-                History.pushState({type: "item", value: item._id}, item.title, newUrl); 
-                console.log("Item Selected");
+                var data = {type: "item", value: item._id};
+                History.pushState(data, item.title, newUrl); 
+                console.log(data);
                 
                 this.$.itemPage.itemId = item._id;
                 var p = this.$.itemOrMainPage;
@@ -71,9 +71,8 @@
             returnFromItem: function(){
                 if(this.blockReturnFromItem !== true){
                     History.pushState({type: "overview", value: this.selected}, this.selected, "/"+this.selected);
-                    console.log("Back to Overview");
                     var p = this.$.itemOrMainPage;
-                    
+
                     if (p.selected === max)
                         p.selected = 0;
                 }else{
@@ -83,9 +82,5 @@
         });
         
         
-        window.onpopstate = function(event) {
-            var state = JSON.stringify(event.state);
-            console.log("state: " + state);
-        };
     </script>
 </polymer-element>

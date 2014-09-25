@@ -55,10 +55,24 @@ module.exports.controller = function(app) {
 		});
     });
     
-    mainRoutes.use(lessMiddleware(path.join(__dirname + "/../less"),{
+    /*mainRoutes.use(lessMiddleware(path.join(__dirname + "/../less"),{
     	dest: path.join(__dirname + "/../"),
     	preprocess: {
             path: function(pathname, req) {
+                return pathname.replace('/public/css', '');
+            }
+        },
+    	// force true recompiles on every request... not the
+    	// best for production, but fine in debug while working
+    	// through changes
+    	force: true
+    }));*/
+    
+    mainRoutes.use(lessMiddleware(path.join(__dirname + "/../public/elements"),{
+    	dest: path.join(__dirname + "/../"),
+    	preprocess: {
+            path: function(pathname, req) {
+                //console.log(pathname);
                 return pathname.replace('/public/css', '');
             }
         },
