@@ -1,0 +1,31 @@
+@import url(style.less);
+
+:host{
+    background-color: @prime-light;
+    border-right: 3px solid @secondary;
+    font: 1.4em 'Dosis', Arial,sans-serif;
+    text-shadow: 1px 1px 2px fade(@secondary-darkest, 60%);
+    color: @prime-lightest;
+    width: 360px;
+}
+#logo{
+    margin: 1em;
+    text-align: center;
+    font: 2em 'Dosis', Arial,sans-serif;
+    font-weight: 600;
+    text-shadow: 1px 1px 4px fade(@secondary-darkest, 90%);
+}
+core-toolbar{
+    background-color: @prime-dark;
+}
+
+::content{
+    core-item:hover {
+        font-weight: bold;
+    }
+    
+    core-item.core-selected {
+        font-weight: bold;
+        color: @secondary;
+    }
+}

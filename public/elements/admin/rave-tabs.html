@@ -1,0 +1,49 @@
+<link rel="import" href="/bower/polymer/polymer.html">
+<link rel="import" href="/bower/paper-tabs/paper-tabs.html">
+<link rel="import" href="/bower/paper-tabs/paper-tab.html">
+<link rel="import" href="/bower/core-pages/core-pages.html">
+<link rel="import" href="/bower/core-overlay/core-overlay.html">
+
+<polymer-element name="rave-tabs" attributes="selected tabs">  
+
+    <template>
+        <style type="text/css">
+            paper-tabs.teal::shadow #selectionBar {
+                background-color: #7584AA;
+            }
+            paper-tabs.teal {
+                background-color: #152754;
+            }
+            paper-tab::shadow #ink {
+                color: #7584AA;
+            }
+            paper-tab{
+                color: #A9B3CD;
+            }
+            #content-area{
+                height: calc(100% - 48px);
+            }
+        </style>
+        <paper-tabs selected="{{selected}}" class="teal" id="paperTabs" >
+            <template repeat="{{tab in tabs}}">
+                <paper-tab>{{tab}}</paper-tab>
+            </template>
+        </paper-tabs>
+        
+        
+        
+        <core-pages id="content-area" selected="{{selected}}" notap  id="corePages">
+            <content></content>
+        </core-pages>  
+    </template>
+
+  <script>
+    /*global Polymer lib*/
+    Polymer('rave-tabs',{
+            selected: '0',
+            ready: function(){
+                this.tabs = eval(this.tabs) || [];
+            }
+        }
+    );
+  </script>
